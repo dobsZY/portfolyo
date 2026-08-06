@@ -15,17 +15,40 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
 <style>
+  :root {
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+    --ease-apple: cubic-bezier(0.32, 0.72, 0, 1);
+  }
   html { background: #050609; scroll-behavior: smooth; }
-  body { margin: 0; background: #050609; color: #d5dce5; font-family: 'Archivo', system-ui, sans-serif; font-weight: 300; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-  a { color: #d5dce5; text-decoration: none; }
+  body { margin: 0; background: #050609; color: #d5dce5; font-family: 'Archivo', system-ui, -apple-system, BlinkMacSystemFont, sans-serif; font-weight: 300; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { color: #d5dce5; text-decoration: none; transition: color 0.2s var(--ease-out); }
   a:hover { color: #7fa8d8; }
   ::selection { background: rgba(127,168,216,0.28); }
   input, textarea, button { font-family: inherit; }
   input:focus-visible, textarea:focus-visible, button:focus-visible, a:focus-visible { outline: 1px solid #7fa8d8; outline-offset: 2px; }
+  
+  /* Apple Design Micro-interactions & Materials */
+  button, a, article[data-reveal], label[style*="cursor: pointer"] {
+    touch-action: manipulation;
+    transition: transform 0.16s var(--ease-out), background-color 0.2s var(--ease-out), border-color 0.2s var(--ease-out), box-shadow 0.25s var(--ease-out);
+  }
+  button:active, a:active, article[data-reveal]:active {
+    transform: scale(0.972) !important;
+  }
+
+  /* Apple Glass Vibrancy Material */
+  .apple-glass {
+    background: rgba(18, 22, 31, 0.62) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  }
+  
   ::-webkit-scrollbar { height: 0; width: 0; }
-  @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
   @keyframes curtainOut { from { opacity: 1 } to { opacity: 0 } }
-  @keyframes hintPulse { 0%,100% { opacity: .45 } 50% { opacity: .9 } }
+  @keyframes hintPulse { 0%,100% { opacity: .45 } 50% { opacity: .95 } }
   @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
 </helmet>
@@ -276,15 +299,44 @@
           </div>
         </form>
 
-        <div data-reveal="1" style="display: flex; flex-direction: column; gap: 18px;">
-          <a href="assets/Dogukaan-Yazici-CV.pdf" download="download" style="display: flex; align-items: center; justify-content: center; gap: 12px; padding: 22px 26px; background: #d5dce5; color: #050609; font-size: 16px; font-weight: 400; letter-spacing: -0.01em; transition: background .25s ease;" style-hover="background: #ffffff;">
-            <span>CV'yi indir</span>
-            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em;">PDF ↓</span>
-          </a>
-          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 18px;">
+        <div data-reveal="1" style="display: flex; flex-direction: column; gap: 16px;">
+          <!-- Dedicated CV Download Card -->
+          <div style="position: relative; overflow: hidden; padding: 22px 24px; border-radius: 12px; border: 1px solid rgba(127,168,216,0.28); background: linear-gradient(135deg, rgba(127,168,216,0.07) 0%, rgba(5,6,9,0.7) 100%); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 38px; height: 38px; border-radius: 8px; border: 1px solid rgba(127,168,216,0.3); background: rgba(127,168,216,0.12); display: flex; align-items: center; justify-content: center; font-size: 18px;">📄</div>
+                <div style="display: flex; flex-direction: column; gap: 2px;">
+                  <span style="font-size: 15px; font-weight: 400; color: #e6ebf1;">Doğukaan Yazıcı — Özgeçmiş</span>
+                  <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8d95a1;">GÜNCEL CV · PDF (240 KB)</span>
+                </div>
+              </div>
+            </div>
+            <a href="assets/Dogukaan-Yazici-CV.pdf" download="download" style="display: flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 20px; border-radius: 8px; border: 1px solid rgba(127,168,216,0.35); background: rgba(127,168,216,0.14); color: #e6ebf1; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em; transition: all 0.25s var(--ease-out);" style-hover="background: rgba(127,168,216,0.28); border-color: rgba(127,168,216,0.6); transform: translateY(-2px);">
+              <span>CV İNDİR</span>
+              <span style="font-size: 13px;">↓</span>
+            </a>
+          </div>
+
+          <!-- Interactive Social & Info Cards Grid -->
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;" data-modal-row="1">
             <sc-for list="{{ links }}" as="k" hint-placeholder-count="3">
-              <a href="{{ k.href }}" style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: #8d95a1; border-bottom: 1px solid rgba(213,220,229,0.16); padding-bottom: 3px; transition: color .25s ease, border-color .25s ease;" style-hover="color: #e6ebf1; border-color: rgba(213,220,229,0.5);">{{ k.label }}</a>
+              <a href="{{ k.href }}" target="_blank" rel="noopener" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; border-radius: 10px; border: 1px solid rgba(213,220,229,0.12); background: rgba(213,220,229,0.025); transition: all 0.25s var(--ease-out);" style-hover="border-color: rgba(127,168,216,0.35); background: rgba(213,220,229,0.06); transform: translateY(-3px);">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.18em; color: #7fa8d8;">{{ k.label }}</span>
+                  <span style="font-size: 12px; color: #8d95a1;">↗</span>
+                </div>
+                <span style="font-size: 13.5px; font-weight: 300; color: #e6ebf1; word-break: break-all;">{{ k.value }}</span>
+              </a>
             </sc-for>
+
+            <div style="display: flex; flex-direction: column; gap: 8px; padding: 16px; border-radius: 10px; border: 1px solid rgba(213,220,229,0.12); background: rgba(213,220,229,0.025);">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.18em; color: #7fa8d8;">LOKASYON &amp; DURUM</span>
+                <span style="width: 7px; height: 7px; border-radius: 50%; background: #34d399; box-shadow: 0 0 8px #34d399;"></span>
+              </div>
+              <span style="font-size: 13.5px; font-weight: 300; color: #e6ebf1;">Ankara / Türkiye</span>
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: #34d399;">TAM ZAMANLI AÇIK</span>
+            </div>
           </div>
         </div>
       </div>
@@ -402,23 +454,36 @@ const CARDS = [
 ];
 
 const STACK = [
-  { title: "GÖRÜNTÜ İŞLEME", items: "OpenCV · MONAI · konvolüsyon çekirdekleri · morfolojik işlemler · Otsu eşikleme · histogram eşitleme · 3D hacim segmentasyonu · CVAT ve X-AnyLabeling ile etiketleme" },
-  { title: "DERİN ÖĞRENME", items: "PyTorch · TensorFlow · U-Net · CNN · Transformer · Mamba (SSM) · spektral geçit · Dice / Focal Tversky / clDice · hiperparametre optimizasyonu · scikit-learn" },
-  { title: "BACKEND & FRONTEND", items: "Python · Flask · RESTful API · MSSQL · MySQL · SQL · C# · JavaScript · HTML/CSS · Canvas API · WebGL (three.js) · React Native ve Expo ile mobil" },
-  { title: "ARAÇLAR", items: "Docker · Git · asyncio · Selenium · BeautifulSoup · Google Document AI · Colab Pro+ · MATLAB" }
+  { title: "GÖRÜNTÜ İŞLEME & NLP", items: "OpenCV · Google Document AI · morfolojik işlemler · Otsu eşikleme · histogram eşitleme · 3D hacim segmentasyonu · DistilROBERTa · metin sınıflandırma · CVAT & X-AnyLabeling ile etiketleme" },
+  { title: "DERİN ÖĞRENME & YZ", items: "PyTorch · TensorFlow · Transformers · U-Net · CNN · Mamba (SSM) · spektral geçit · fine-tuning · Dice / Focal Tversky / clDice · scikit-learn" },
+  { title: "YAZILIM & MOBİL", items: "Python · C# · JavaScript · SQL · C++ · Java · React Native & Expo · Flask · RESTful API · HTML/CSS · WebGL (three.js) · Canvas API · Tersine Mühendislik" },
+  { title: "VERİ & MÜHENDİSLİK ARAÇLARI", items: "Docker · Git/GitHub · MSSQL · MySQL · asyncio · Selenium · BeautifulSoup · Colab Pro+ · Kaggle · MATLAB" }
 ];
 
 const COLUMNS = [
   { head: "DENEYİM", rows: [
-    { date: "2025 — devam", role: "Yapay Zekâ / Görüntü İşleme Mühendisi", org: "Bomensoft", city: "Ankara", hasSub: true, sub: [
-      { n: "Enerjisa", d: "Video analizi ve PoC geliştirme — 9.000+ videoluk setin temizlenmesi, etiketleme ve model eğitimi." },
-      { n: "Astor", d: "Legacy Visual Basic sisteminin Flask mimarisine taşınması, AutoCAD bağımlı raporlamanın web servisine dönüştürülmesi." },
-      { n: "Bağımsız projeler", d: "627.000 görsellik veri hattı, PDF → metin çıkarım servisi ve TASM-UNet segmentasyon araştırması." }
+    { date: "02/2026 — devam", role: "Bilgisayar Mühendisliği Uzun Dönem Stajyeri", org: "Bomensoft", city: "Ankara / İstanbul", hasSub: true, sub: [
+      { n: "Kurumsal Web Sitesi & Deploy", d: "Şirketin resmi kurumsal web sitesinin baştan sona tasarımı, geliştirmesi ve canlıya alınması." },
+      { n: "Enerjisa PoC & YZ", d: "9.000+ videoluk setin temizlenmesi, CVAT etiketleme, model eğitimi ve PoC uygulaması." },
+      { n: "Astor Modernizasyonu", d: "Visual Basic masaüstü uygulamasının tersine mühendislik ile analiz edilip Flask mimarisine taşınması." },
+      { n: "Asenkron Veri Hattı", d: "Anti-bot scraping ile 600.000+ (45 GB) görsellik hiyerarşik veri seti hazırlanması." }
+    ] },
+    { date: "10/2025 — 01/2026", role: "Part Time Bilgisayar Mühendisi", org: "Selçuk Üniversitesi - Teknoloji Fakültesi", city: "Konya", hasSub: true, sub: [
+      { n: "Kütüphane Rezervasyon Mobil Uygulaması", d: "React Native ve Expo ile cross-platform mobil uygulama, RESTful API backend mimarisi ve canlı ortam optimizasyonları." }
+    ] },
+    { date: "08/2025 — 09/2025", role: "Bilgisayar Mühendisliği Stajyeri", org: "Web Beyaz", city: "Samsun", hasSub: true, sub: [
+      { n: "Web Tasarım & Ön Yüz Geliştirme", d: "Web tasarım projelerinde arayüz geliştirme ve front-end düzenleme desteği." }
+    ] },
+    { date: "07/2025 — 08/2025", role: "Bilgisayar Mühendisliği Stajyeri", org: "Ethos Finansal Danışmanlık", city: "Ankara", hasSub: true, sub: [
+      { n: "PDF → Metin Çıkarım Servisi", d: "Google Document AI, Flask ve Python ile kopyalanamaz PDF'leri metne dönüştüren web servisi." }
     ] }
   ] },
   { head: "EĞİTİM", rows: [
-    { date: "9 ay · mezun", role: "Veri Bilimi ve Yapay Zekâ", org: "Marmara Üniversitesi", city: "İstanbul", note: "YÖK ONAYLI PROGRAM" },
-    { date: "2022 — 2026", role: "Bilgisayar Mühendisliği · GPA 3.30", org: "Selçuk Üniversitesi", city: "Konya" }
+    { date: "2022 — 2026", role: "Bilgisayar Mühendisliği (BS) · GPA 3.20 / 4.0", org: "Selçuk Üniversitesi", city: "Konya" },
+    { date: "2023 — devam", role: "E-Ticaret ve Pazarlama (Önlisans · 2. Üniversite)", org: "İstanbul Üniversitesi", city: "İstanbul" },
+    { date: "2025 — devam", role: "Yapay Zekâ Uzmanlık Programı", org: "T.C. Sanayi ve Teknoloji Bakanlığı", note: "BAKANLIK PROGRAMI" },
+    { date: "2025 — devam", role: "Yapay Zeka ve Veri Analizi Okulu", org: "YÖK", note: "YÖK ONAYLI PROGRAM" },
+    { date: "2017 — 2021", role: "Web Programlama", org: "İstiklal Mesleki ve Teknik Anadolu Lisesi", city: "Ankara" }
   ] }
 ];
 
@@ -607,8 +672,51 @@ class Component extends DCLogic {
     if (el.__hov) return;
     el.__hov = 1;
     const gsap = window.gsap;
-    el.addEventListener("pointerenter", () => gsap.to(el, { y: -4, borderColor: "rgba(213,220,229,0.34)", backgroundColor: "rgba(213,220,229,0.05)", duration: 0.35, ease: "power2.out" }));
-    el.addEventListener("pointerleave", () => gsap.to(el, { y: 0, borderColor: "rgba(213,220,229,0.12)", backgroundColor: "rgba(213,220,229,0.022)", duration: 0.4, ease: "power2.out" }));
+    el.style.transformStyle = "preserve-3d";
+    el.style.perspective = "1000px";
+
+    const move = (e) => {
+      if (this._reduced) return;
+      const rect = el.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const cx = rect.width / 2;
+      const cy = rect.height / 2;
+      const rx = ((y - cy) / cy) * -4.5;
+      const ry = ((x - cx) / cx) * 4.5;
+      if (gsap) {
+        gsap.to(el, {
+          rotateX: rx,
+          rotateY: ry,
+          y: -6,
+          borderColor: "rgba(127,168,216,0.38)",
+          backgroundColor: "rgba(213,220,229,0.045)",
+          boxShadow: "0 14px 32px -10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08)",
+          duration: 0.25,
+          ease: "power2.out",
+          overwrite: "auto"
+        });
+      }
+    };
+
+    const leave = () => {
+      if (gsap) {
+        gsap.to(el, {
+          rotateX: 0,
+          rotateY: 0,
+          y: 0,
+          borderColor: "rgba(213,220,229,0.12)",
+          backgroundColor: "rgba(213,220,229,0.022)",
+          boxShadow: "none",
+          duration: 0.35,
+          ease: "power3.out",
+          overwrite: "auto"
+        });
+      }
+    };
+
+    el.addEventListener("pointermove", move);
+    el.addEventListener("pointerleave", leave);
   }
 
   bindCounters() {
@@ -658,9 +766,8 @@ class Component extends DCLogic {
         vLayer.style.visibility = o < 0.01 ? "hidden" : "visible";
       }
       if (pcb) {
-        const rise = this._mobile ? (past ? 1 : 0) : ramp(0.82, 1);
-        const vOp = this._mobile ? (past ? 0 : 1) : 1 - out;
-        pcb.style.opacity = (0.36 * rise * (1 - vOp * 0.95)).toFixed(4);
+        const rise = this._mobile ? (past ? 1 : 0) : Math.min(1, window.scrollY / 300);
+        pcb.style.opacity = Math.max(0.38, 0.38 * rise).toFixed(4);
       }
       if (copy && !this._mobile) {
         copy.style.opacity = (1 - ramp(0.86, 1)).toFixed(3);
@@ -893,13 +1000,7 @@ class Component extends DCLogic {
     };
     this._pcbResize();
 
-    this._pcbVisible = false;
-    this._pcbIo = new IntersectionObserver((es) => {
-      this._pcbVisible = es.some((e) => e.isIntersecting);
-      if (this._pcbVisible) this.startPcb();
-    }, { rootMargin: "20% 0px" });
-    [document.getElementById("shiftPanel"), document.getElementById("below")].forEach((el) => { if (el) this._pcbIo.observe(el); });
-
+    this._pcbVisible = true;
     if (this._reduced) { this.renderPcb(); return; }
     this.startPcb();
   }
@@ -907,7 +1008,7 @@ class Component extends DCLogic {
   startPcb() {
     if (this._reduced || this._pcbRaf || !this._pcb) return;
     const step = () => {
-      if (this._dead || !this._pcbVisible) { this._pcbRaf = null; return; }
+      if (this._dead) { this._pcbRaf = null; return; }
       this._pcbRaf = requestAnimationFrame(step);
       this._pcb.mat.uniforms.uTime.value = performance.now() / 1000;
       this.renderPcb();
