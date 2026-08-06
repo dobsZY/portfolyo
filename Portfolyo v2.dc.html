@@ -191,11 +191,11 @@
     </div>
   </section>
 
-  <div id="below" style="position: relative; z-index: 3;">
+  <main id="below" role="main" style="position: relative; z-index: 3;">
 
     <section id="calismalar" data-screen-label="Çalışmalar" style="max-width: 1240px; margin: 0 auto; padding: clamp(70px, 9vw, 130px) clamp(18px, 5vw, 50px) 0;">
       <div data-reveal="1" style="display: flex; align-items: baseline; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 30px;">
-        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.22em; color: #7fa8d8;">01 — ÇALIŞMALAR</span>
+        <h2 style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.22em; color: #7fa8d8; margin: 0;">01 — ÇALIŞMALAR</h2>
         <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; color: #8d95a1;">KARTA TIKLA · DETAY</span>
       </div>
 
@@ -230,12 +230,12 @@
 
     <section id="teknik" data-screen-label="Teknik" style="max-width: 1240px; margin: 0 auto; padding: clamp(70px, 9vw, 130px) clamp(18px, 5vw, 50px) 0;">
       <div data-reveal="1" style="margin-bottom: 26px;">
-        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.22em; color: #7fa8d8;">02 — TEKNİK</span>
+        <h2 style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.22em; color: #7fa8d8; margin: 0;">02 — TEKNİK</h2>
       </div>
       <div style="display: flex; flex-direction: column;">
         <sc-for list="{{ stack }}" as="g" hint-placeholder-count="4">
           <div data-reveal="1" data-stack-row="1" style="display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 22px; align-items: baseline; padding: 17px 2px; border-top: 1px solid rgba(213,220,229,0.1);">
-            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; color: #8d95a1;">{{ g.title }}</span>
+            <h3 style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 400; letter-spacing: 0.18em; color: #8d95a1; margin: 0;">{{ g.title }}</h3>
             <p style="margin: 0; font-size: clamp(14px, 1.5vw, 16.5px); line-height: 1.66; color: #c3cad3; text-wrap: pretty;">{{ g.items }}</p>
           </div>
         </sc-for>
@@ -245,12 +245,12 @@
 
     <section id="deneyim" data-screen-label="Deneyim" style="max-width: 1240px; margin: 0 auto; padding: clamp(70px, 9vw, 130px) clamp(18px, 5vw, 50px) 0;">
       <div data-reveal="1" style="margin-bottom: 26px;">
-        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.22em; color: #7fa8d8;">03 — DENEYİM &amp; EĞİTİM</span>
+        <h2 style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.22em; color: #7fa8d8; margin: 0;">03 — DENEYİM &amp; EĞİTİM</h2>
       </div>
       <div data-two-col="1" style="display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 5vw, 64px);">
         <sc-for list="{{ columns }}" as="col" hint-placeholder-count="2">
           <div style="display: flex; flex-direction: column;">
-            <span data-reveal="1" style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; color: #8d95a1; padding-bottom: 14px;">{{ col.head }}</span>
+            <h3 data-reveal="1" style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 400; letter-spacing: 0.18em; color: #8d95a1; margin: 0; padding-bottom: 14px;">{{ col.head }}</h3>
             <sc-for list="{{ col.rows }}" as="r" hint-placeholder-count="3">
               <div data-reveal="1" style="display: flex; flex-direction: column; gap: 7px; padding: 17px 0; border-top: 1px solid rgba(213,220,229,0.1);">
                 <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.12em; color: #8d95a1;">{{ r.date }}</span>
@@ -279,7 +279,7 @@
 
     <section id="lab" data-screen-label="Lab" style="max-width: 1240px; margin: 0 auto; padding: clamp(70px, 9vw, 130px) clamp(18px, 5vw, 50px) 0;">
       <div data-reveal="1" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 26px;">
-        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.22em; color: #7fa8d8;">04 — GÖRÜNTÜ İŞLEME LAB</span>
+        <h2 style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.22em; color: #7fa8d8; margin: 0;">04 — GÖRÜNTÜ İŞLEME LAB</h2>
         <p style="margin: 0; max-width: 560px; font-size: 15px; line-height: 1.62; color: #7b838f; text-wrap: pretty;">
           Konvolüsyon çekirdekleri, eşikleme ve histogram elle yazıldı — hazır
           kütüphane yok. Kendi görselini sürükleyip bırakabilirsin.
@@ -338,7 +338,7 @@
 
     <section id="iletisim" data-screen-label="İletişim" style="max-width: 1240px; margin: 0 auto; padding: clamp(70px, 9vw, 130px) clamp(18px, 5vw, 50px) 0;">
       <div data-reveal="1" style="margin-bottom: 26px;">
-        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.22em; color: #7fa8d8;">05 — İLETİŞİM</span>
+        <h2 style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.22em; color: #7fa8d8; margin: 0;">05 — İLETİŞİM</h2>
       </div>
 
       <div data-contact-grid="1" style="display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(20px, 4vw, 48px); align-items: start;">
@@ -362,7 +362,6 @@
         </form>
 
         <div data-reveal="1" style="display: flex; flex-direction: column; gap: 16px;">
-          <!-- Dedicated CV Download Card -->
           <div style="position: relative; overflow: hidden; padding: 22px 24px; border-radius: 12px; border: 1px solid rgba(127,168,216,0.28); background: linear-gradient(135deg, rgba(127,168,216,0.07) 0%, rgba(5,6,9,0.7) 100%); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; flex-direction: column; gap: 14px;">
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
               <div style="display: flex; align-items: center; gap: 10px;">
@@ -379,8 +378,7 @@
             </a>
           </div>
 
-          <!-- Interactive Social & Info Cards Grid -->
-          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;" data-modal-row="1">
+          <address style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; font-style: normal;" data-modal-row="1">
             <sc-for list="{{ links }}" as="k" hint-placeholder-count="3">
               <a href="{{ k.href }}" target="_blank" rel="noopener" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; border-radius: 10px; border: 1px solid rgba(213,220,229,0.12); background: rgba(213,220,229,0.025); transition: all 0.25s var(--ease-out);" style-hover="border-color: rgba(127,168,216,0.35); background: rgba(213,220,229,0.06); transform: translateY(-3px);">
                 <div style="display: flex; align-items: center; justify-content: space-between;">
@@ -399,7 +397,7 @@
               <span style="font-size: 13.5px; font-weight: 300; color: #e6ebf1;">Ankara / Türkiye</span>
               <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: #34d399;">TAM ZAMANLI AÇIK</span>
             </div>
-          </div>
+          </address>
         </div>
       </div>
     </section>
@@ -408,7 +406,7 @@
       <span>DOĞUKAAN YAZICI — YAPAY ZEKÂ / GÖRÜNTÜ İŞLEME</span>
       <span>ANKARA · 2026</span>
     </footer>
-  </div>
+  </main>
 
   <sc-if value="{{ modal }}" hint-placeholder-val="{{ false }}">
     <div onClick="{{ closeModal }}" style="position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: clamp(14px, 4vw, 48px); background: rgba(3,4,6,0.82); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); animation: rise .28s ease-out both;">
