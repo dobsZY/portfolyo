@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@200;300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+<style>
+  html { background: #050609; scroll-behavior: smooth; }
+  body { margin: 0; background: #050609; color: #d5dce5; font-family: 'Archivo', system-ui, sans-serif; font-weight: 300; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { color: #d5dce5; text-decoration: none; }
+  a:hover { color: #7fa8d8; }
+  ::selection { background: rgba(127,168,216,0.28); }
+  input, textarea, button { font-family: inherit; }
+  input:focus-visible, textarea:focus-visible, button:focus-visible, a:focus-visible { outline: 1px solid #7fa8d8; outline-offset: 2px; }
+  ::-webkit-scrollbar { height: 0; width: 0; }
+  @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes curtainOut { from { opacity: 1 } to { opacity: 0 } }
+  @keyframes hintPulse { 0%,100% { opacity: .45 } 50% { opacity: .9 } }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</helmet>
+
+<div style="position: relative; background: #050609;">
+
+  <div id="pcbLayer" style="position: fixed; inset: 0; z-index: 0; opacity: 0; pointer-events: none; mask-image: linear-gradient(90deg, #000 0%, #000 9%, rgba(0,0,0,0.32) 27%, rgba(0,0,0,0.32) 73%, #000 91%, #000 100%); -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 9%, rgba(0,0,0,0.32) 27%, rgba(0,0,0,0.32) 73%, #000 91%, #000 100%);">
+    <canvas id="pcbCanvas" style="position: absolute; inset: 0; width: 100%; height: 100%; display: block;"></canvas>
+  </div>
+
+  <div id="videoLayer" style="position: fixed; inset: 0; z-index: 0; opacity: 1; will-change: opacity, transform;">
+    <video id="heroVideo" muted="muted" playsinline="playsinline" preload="auto" poster="assets/hero-poster.jpg" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;"></video>
+    <div style="position: absolute; inset: 0; background: radial-gradient(115% 85% at 50% 45%, rgba(5,6,9,0) 34%, rgba(5,6,9,0.6) 78%, rgba(5,6,9,0.9) 100%);"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5,6,9,0.86) 0%, rgba(5,6,9,0.4) 24%, rgba(5,6,9,0.54) 70%, rgba(5,6,9,0.94) 100%);"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(5,6,9,0.92) 0%, rgba(5,6,9,0.8) 26%, rgba(5,6,9,0.48) 48%, rgba(5,6,9,0.08) 72%, rgba(5,6,9,0) 88%);"></div>
+    <div style="position: absolute; inset: 0; opacity: 0.45; mix-blend-mode: overlay; background-image: repeating-linear-gradient(64deg, rgba(255,255,255,0.08) 0px 1px, rgba(0,0,0,0.08) 1px 2px), repeating-linear-gradient(-27deg, rgba(255,255,255,0.06) 0px 1px, rgba(0,0,0,0.06) 1px 3px); background-size: 2.5px 2.5px, 4px 4px;"></div>
+  </div>
+
+  <div id="curtain" style="position: fixed; inset: 0; z-index: 25; pointer-events: none; background: #050609; animation: curtainOut .6s ease-out both;"></div>
+
+  <header style="position: fixed; top: 0; left: 0; right: 0; z-index: 40; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 18px; padding: 14px clamp(14px, 3vw, 34px); background: linear-gradient(180deg, rgba(5,6,9,0.82) 0%, rgba(5,6,9,0.45) 62%, rgba(5,6,9,0) 100%); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);">
+    <a href="#top" style="display: flex; flex-direction: column; gap: 3px; min-width: 0;">
+      <span style="font-size: clamp(14px, 1.6vw, 17px); font-weight: 400; letter-spacing: -0.01em; color: #e6ebf1; white-space: nowrap;">Doğukaan Yazıcı</span>
+      <span data-wide="1" style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 400; letter-spacing: 0.14em; color: #8d95a1; white-space: nowrap;">Yapay Zekâ / Görüntü İşleme Mühendisi</span>
+    </a>
+
+    <nav id="navWrap" style="min-width: 0; display: flex; justify-content: center; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;">
+      <div style="position: relative; display: flex; gap: 3px; padding: 4px; border-radius: 999px; border: 1px solid rgba(213,220,229,0.12); background: rgba(213,220,229,0.05); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); white-space: nowrap;">
+        <div id="navPill" style="position: absolute; top: 4px; bottom: 4px; left: 0; width: 0; opacity: 0; border-radius: 999px; border: 1px solid rgba(213,220,229,0.22); background: rgba(213,220,229,0.13); pointer-events: none;"></div>
+        <sc-for list="{{ nav }}" as="n" hint-placeholder-count="5">
+          <button data-nav="{{ n.id }}" onClick="{{ n.go }}" onPointerEnter="{{ n.over }}" onPointerLeave="{{ n.out }}" style="{{ n.style }}">{{ n.label }}</button>
+        </sc-for>
+      </div>
+    </nav>
+
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <a href="assets/Dogukaan-Yazici-CV.pdf" download="download" style="padding: 8px 13px; border-radius: 999px; border: 1px solid rgba(213,220,229,0.14); background: rgba(213,220,229,0.04); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #d5dce5; white-space: nowrap;" style-hover="border-color: rgba(213,220,229,0.34);">CV ↓</a>
+      <a data-wide="1" href="mailto:dogukaanyazici@gmail.com" style="padding: 8px 13px; border-radius: 999px; border: 1px solid rgba(213,220,229,0.14); background: rgba(213,220,229,0.04); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #d5dce5; white-space: nowrap;" style-hover="border-color: rgba(213,220,229,0.34);">E-POSTA</a>
+    </div>
+  </header>
+
+  <section id="top" data-screen-label="Hero" style="position: relative; z-index: 2; height: 180vh;">
+    <div id="heroSticky" style="position: sticky; top: 0; height: 100vh; overflow: hidden; padding: 0 clamp(20px, 6vw, 90px);">
+      <div id="heroCopy" style="position: absolute; top: 50%; left: clamp(20px, 6vw, 90px); width: min(780px, 68vw); transform: translateY(-50%); display: flex; flex-direction: column; gap: 20px; will-change: transform, opacity;">
+        <h1 style="margin: 0; font-size: clamp(40px, 8.2vw, 124px); font-weight: 200; line-height: 0.95; letter-spacing: -0.035em; color: #e6ebf1; animation: rise .6s cubic-bezier(.22,1,.3,1) .18s both;">
+          Doğukaan<br />Yazıcı
+        </h1>
+        <p style="margin: 0; font-size: clamp(19px, 2.6vw, 34px); font-weight: 200; line-height: 1.18; letter-spacing: -0.02em; color: #b9c1cb; text-wrap: pretty; animation: rise .6s cubic-bezier(.22,1,.3,1) .26s both;">
+          Görüntüden anlam çıkaran sistemler.
+        </p>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.2em; color: #8d95a1; animation: rise .6s cubic-bezier(.22,1,.3,1) .32s both;">YAPAY ZEKÂ / GÖRÜNTÜ İŞLEME MÜHENDİSİ · ANKARA</span>
+        <p style="margin: 4px 0 0; max-width: 450px; font-size: clamp(14px, 1.4vw, 16px); line-height: 1.6; color: #8d95a1; text-wrap: pretty; animation: rise .6s cubic-bezier(.22,1,.3,1) .38s both;">
+          Derin öğrenme modelleri eğitiyorum ve orada bırakmıyorum — modeli
+          Flask ile sarıp gerçekten çalışan bir servise dönüştürüyorum.
+        </p>
+      </div>
+
+      <div id="scrollHint" style="position: absolute; bottom: 30px; left: clamp(20px, 6vw, 90px); display: flex; align-items: center; gap: 10px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.22em; color: #8d95a1; animation: hintPulse 2.6s ease-in-out 1s infinite;">
+        <span>KAYDIRARAK AÇ</span><span>↓</span>
+      </div>
+      <div style="position: absolute; bottom: 30px; right: clamp(20px, 6vw, 90px); font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; color: #6b7280;">
+        <span id="vFrame">···</span> / <span id="vDur">16.0</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="shiftPanel" data-screen-label="Geçiş" style="position: relative; z-index: 3; min-height: 70vh; display: flex; align-items: center; padding: 0 clamp(20px, 6vw, 90px);">
+    <div data-reveal="1" style="width: min(620px, 92vw); display: flex; flex-direction: column; gap: 18px;">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.22em; color: #7fa8d8;">KAMERA YÜKSELİYOR</span>
+      <h2 style="margin: 0; font-size: clamp(26px, 4.2vw, 54px); font-weight: 200; line-height: 1.06; letter-spacing: -0.03em; color: #e6ebf1; text-wrap: pretty;">
+        Çipten anakarta:<br />modelden servise.
+      </h2>
+      <p style="margin: 0; max-width: 430px; font-size: clamp(13.5px, 1.4vw, 16px); line-height: 1.62; color: #a8b0bb; text-wrap: pretty;">
+        627.000 görselden 45 GB'lık bir veri seti, O(n) karmaşıklığa indirilmiş
+        bir segmentasyon modeli ve bunları taşıyan API'ler. Aşağıda hepsinin
+        izleri var.
+      </p>
+    </div>
+  </section>
+
+  <div id="below" style="position: relative; z-index: 3;">
+
+    <section id="calismalar" data-screen-label="Çalışmalar" style="max-width: 1240px; margin: 0 auto; padding: clamp(70px, 9vw, 130px) clamp(18px, 5vw, 50px) 0;">
+      <div data-reveal="1" style="display: flex; align-items: baseline; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 30px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.22em; color: #7fa8d8;">01 — ÇALIŞMALAR</span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; color: #8d95a1;">KARTA TIKLA · DETAY</span>
+      </div>
+
+      <div data-bento="1" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;">
+        <sc-for list="{{ cards }}" as="c" hint-placeholder-count="6">
+          <article data-reveal="1" data-id="{{ c.id }}" data-cspan="{{ c.cspan }}" data-rspan="{{ c.rspan }}" tabindex="0" role="button" onClick="{{ c.open }}" onKeyDown="{{ c.key }}" style="{{ c.style }}">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 14px;">
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.2em; color: #7fa8d8;">{{ c.label }}</span>
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; color: #8d95a1;">{{ c.year }}</span>
+            </div>
+            <h3 style="margin: 0; font-size: {{ c.titleSize }}; font-weight: 200; line-height: 1.14; letter-spacing: -0.02em; color: #e6ebf1; text-wrap: pretty;">{{ c.title }}</h3>
+            <p style="margin: 0; font-size: 13.5px; line-height: 1.62; color: #7b838f; text-wrap: pretty;">{{ c.summary }}</p>
+            <div style="display: flex; flex-direction: column; gap: 13px; padding-top: 4px;">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <sc-for list="{{ c.metrics }}" as="m" hint-placeholder-count="2">
+                  <div style="display: flex; flex-direction: column; gap: 3px; padding-top: 10px; border-top: 1px solid rgba(213,220,229,0.13);">
+                    <span data-count="{{ m.key }}" style="font-size: 18px; font-weight: 200; letter-spacing: -0.02em; color: #e6ebf1;">{{ m.v }}</span>
+                    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.13em; color: #8d95a1;">{{ m.k }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                <sc-for list="{{ c.tech }}" as="tt" hint-placeholder-count="3">
+                  <span style="padding: 4px 8px; border: 1px solid rgba(213,220,229,0.12); font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.08em; color: #8d95a1;">{{ tt }}</span>
+                </sc-for>
+              </div>
+            </div>
+          </article>
+        </sc-for>
+      </div>
+    </section>
+
+    <section id="teknik" data-screen-label="Teknik" style="max-width: 1240px; margin: 0 auto; padding: clamp(70px, 9vw, 130px) clamp(18px, 5vw, 50px) 0;">
+      <div data-reveal="1" style="margin-bottom: 26px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.22em; color: #7fa8d8;">02 — TEKNİK</span>
+      </div>
+      <div style="display: flex; flex-direction: column;">
+        <sc-for list="{{ stack }}" as="g" hint-placeholder-count="4">
+          <div data-reveal="1" data-stack-row="1" style="display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 22px; align-items: baseline; padding: 17px 2px; border-top: 1px solid rgba(213,220,229,0.1);">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; color: #8d95a1;">{{ g.title }}</span>
+            <p style="margin: 0; font-size: clamp(14px, 1.5vw, 16.5px); line-height: 1.66; color: #c3cad3; text-wrap: pretty;">{{ g.items }}</p>
+          </div>
+        </sc-for>
+        <div style="border-top: 1px solid rgba(213,220,229,0.1);"></div>
+      </div>
+    </section>
+
+    <section id="deneyim" data-screen-label="Deneyim" style="max-width: 1240px; margin: 0 auto; padding: clamp(70px, 9vw, 130px) clamp(18px, 5vw, 50px) 0;">
+      <div data-reveal="1" style="margin-bottom: 26px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.22em; color: #7fa8d8;">03 — DENEYİM &amp; EĞİTİM</span>
+      </div>
+      <div data-two-col="1" style="display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 5vw, 64px);">
+        <sc-for list="{{ columns }}" as="col" hint-placeholder-count="2">
+          <div style="display: flex; flex-direction: column;">
+            <span data-reveal="1" style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; color: #8d95a1; padding-bottom: 14px;">{{ col.head }}</span>
+            <sc-for list="{{ col.rows }}" as="r" hint-placeholder-count="3">
+              <div data-reveal="1" style="display: flex; flex-direction: column; gap: 7px; padding: 17px 0; border-top: 1px solid rgba(213,220,229,0.1);">
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.12em; color: #8d95a1;">{{ r.date }}</span>
+                <span style="font-size: clamp(16px, 1.8vw, 20px); font-weight: 300; letter-spacing: -0.01em; color: #e6ebf1;">{{ r.role }}</span>
+                <span style="font-size: 13.5px; color: #9aa2ac;">{{ r.org }} · {{ r.city }}</span>
+                <sc-if value="{{ r.hasSub }}" hint-placeholder-val="{{ false }}">
+                  <div style="display: flex; flex-direction: column; gap: 7px; margin-top: 5px; padding-left: 15px; border-left: 1px solid rgba(213,220,229,0.14);">
+                    <sc-for list="{{ r.sub }}" as="s" hint-placeholder-count="3">
+                      <div style="display: flex; flex-direction: column; gap: 2px;">
+                        <span style="font-size: 13.5px; color: #c3cad3;">{{ s.n }}</span>
+                        <span style="font-size: 12.5px; line-height: 1.5; color: #7b838f; text-wrap: pretty;">{{ s.d }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ r.note }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: #7fa8d8;">{{ r.note }}</span>
+                </sc-if>
+              </div>
+            </sc-for>
+            <div style="border-top: 1px solid rgba(213,220,229,0.1);"></div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section id="lab" data-screen-label="Lab" style="max-width: 1240px; margin: 0 auto; padding: clamp(70px, 9vw, 130px) clamp(18px, 5vw, 50px) 0;">
+      <div data-reveal="1" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 26px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.22em; color: #7fa8d8;">04 — GÖRÜNTÜ İŞLEME LAB</span>
+        <p style="margin: 0; max-width: 560px; font-size: 15px; line-height: 1.62; color: #7b838f; text-wrap: pretty;">
+          Konvolüsyon çekirdekleri, eşikleme ve histogram elle yazıldı — hazır
+          kütüphane yok. Kendi görselini sürükleyip bırakabilirsin.
+        </p>
+      </div>
+
+      <div data-lab-grid="1" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div id="labDrop" data-reveal="1" style="display: flex; flex-direction: column; gap: 10px; padding: 16px; border: 1px solid rgba(213,220,229,0.12); background: rgba(213,220,229,0.022); transition: border-color .25s ease;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.18em; color: #8d95a1;">KAYNAK</span>
+            <label style="padding: 5px 10px; border: 1px solid rgba(213,220,229,0.14); cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; color: #d5dce5;" style-hover="border-color: rgba(213,220,229,0.34);">
+              GÖRSEL SEÇ
+              <input type="file" accept="image/*" onChange="{{ onPick }}" style="display: none;" />
+            </label>
+          </div>
+          <canvas id="labSrc" style="display: block; width: 100%; height: auto; background: #04050a;"></canvas>
+        </div>
+
+        <div data-reveal="1" style="display: flex; flex-direction: column; gap: 10px; padding: 16px; border: 1px solid rgba(213,220,229,0.12); background: rgba(213,220,229,0.022);">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.18em; color: #8d95a1;">ÇIKTI</span>
+            <span id="labMs" style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; color: #7fa8d8;">— ms</span>
+          </div>
+          <canvas id="labOut" style="display: block; width: 100%; height: auto; background: #04050a;"></canvas>
+        </div>
+      </div>
+
+      <div data-reveal="1" style="display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 12px; margin-top: 12px;" data-lab-ctl="1">
+        <div style="display: flex; flex-direction: column; gap: 16px; padding: 18px; border: 1px solid rgba(213,220,229,0.12); background: rgba(213,220,229,0.022);">
+          <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+            <sc-for list="{{ ops }}" as="o" hint-placeholder-count="5">
+              <button onClick="{{ o.pick }}" style="{{ o.style }}">{{ o.n }}</button>
+            </sc-for>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <sc-for list="{{ sliders }}" as="s" hint-placeholder-count="2">
+              <label style="display: flex; flex-direction: column; gap: 7px;">
+                <span style="display: flex; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.14em; color: #8d95a1;">
+                  <span>{{ s.label }}</span><span style="color: #d5dce5;">{{ s.value }}</span>
+                </span>
+                <input type="range" min="{{ s.min }}" max="{{ s.max }}" step="{{ s.step }}" value="{{ s.value }}" onInput="{{ s.set }}" style="width: 100%; accent-color: #7fa8d8;" />
+              </label>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px; padding: 18px; border: 1px solid rgba(213,220,229,0.12); background: rgba(213,220,229,0.022);">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.18em; color: #8d95a1;">HİSTOGRAM</span>
+          <canvas id="labHist" style="display: block; width: 100%; height: 78px;"></canvas>
+        </div>
+      </div>
+
+      <p style="margin: 12px 0 0; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.1em; line-height: 1.7; color: #8d95a1;">
+        Görsel tarayıcından çıkmıyor — hiçbir sunucuya gönderilmiyor.
+      </p>
+    </section>
+
+    <section id="iletisim" data-screen-label="İletişim" style="max-width: 1240px; margin: 0 auto; padding: clamp(70px, 9vw, 130px) clamp(18px, 5vw, 50px) 0;">
+      <div data-reveal="1" style="margin-bottom: 26px;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.22em; color: #7fa8d8;">05 — İLETİŞİM</span>
+      </div>
+
+      <div data-contact-grid="1" style="display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(20px, 4vw, 48px); align-items: start;">
+        <form data-reveal="1" onSubmit="{{ onSubmit }}" style="display: flex; flex-direction: column; gap: 14px;">
+          <label style="display: flex; flex-direction: column; gap: 7px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.16em; color: #8d95a1;">İSİM</span>
+            <input name="name" type="text" required="required" autocomplete="name" style="padding: 12px 14px; border: 1px solid rgba(213,220,229,0.14); background: rgba(213,220,229,0.03); color: #e6ebf1; font-size: 14.5px;" />
+          </label>
+          <label style="display: flex; flex-direction: column; gap: 7px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.16em; color: #8d95a1;">E-POSTA</span>
+            <input name="email" type="email" required="required" autocomplete="email" style="padding: 12px 14px; border: 1px solid rgba(213,220,229,0.14); background: rgba(213,220,229,0.03); color: #e6ebf1; font-size: 14.5px;" />
+          </label>
+          <label style="display: flex; flex-direction: column; gap: 7px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.16em; color: #8d95a1;">MESAJ</span>
+            <textarea name="message" rows="5" required="required" style="padding: 12px 14px; border: 1px solid rgba(213,220,229,0.14); background: rgba(213,220,229,0.03); color: #e6ebf1; font-size: 14.5px; resize: vertical;"></textarea>
+          </label>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px;">
+            <button type="submit" disabled="{{ sending }}" style="{{ submitStyle }}">{{ submitLabel }}</button>
+            <span role="status" style="{{ statusStyle }}">{{ statusText }}</span>
+          </div>
+        </form>
+
+        <div data-reveal="1" style="display: flex; flex-direction: column; gap: 18px;">
+          <a href="assets/Dogukaan-Yazici-CV.pdf" download="download" style="display: flex; align-items: center; justify-content: center; gap: 12px; padding: 22px 26px; background: #d5dce5; color: #050609; font-size: 16px; font-weight: 400; letter-spacing: -0.01em; transition: background .25s ease;" style-hover="background: #ffffff;">
+            <span>CV'yi indir</span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em;">PDF ↓</span>
+          </a>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 18px;">
+            <sc-for list="{{ links }}" as="k" hint-placeholder-count="3">
+              <a href="{{ k.href }}" style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: #8d95a1; border-bottom: 1px solid rgba(213,220,229,0.16); padding-bottom: 3px; transition: color .25s ease, border-color .25s ease;" style-hover="color: #e6ebf1; border-color: rgba(213,220,229,0.5);">{{ k.label }}</a>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer style="max-width: 1240px; margin: 0 auto; padding: clamp(60px, 8vw, 110px) clamp(18px, 5vw, 50px) 48px; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.16em; color: #8d95a1;">
+      <span>DOĞUKAAN YAZICI — YAPAY ZEKÂ / GÖRÜNTÜ İŞLEME</span>
+      <span>ANKARA · 2026</span>
+    </footer>
+  </div>
+
+  <sc-if value="{{ modal }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeModal }}" style="position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: clamp(14px, 4vw, 48px); background: rgba(3,4,6,0.82); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); animation: rise .28s ease-out both;">
+      <div id="modalPanel" role="dialog" aria-modal="true" onClick="{{ stop }}" style="position: relative; width: min(880px, 100%); max-height: 88vh; overflow-y: auto; padding: clamp(22px, 3.4vw, 42px); border: 1px solid rgba(213,220,229,0.16); background: #090b10;">
+        <button id="modalClose" onClick="{{ closeModal }}" aria-label="Kapat" style="position: absolute; top: 16px; right: 16px; width: 34px; height: 34px; border: 1px solid rgba(213,220,229,0.16); background: transparent; cursor: pointer; color: #d5dce5; font-size: 15px; line-height: 1;" style-hover="border-color: rgba(213,220,229,0.4);">×</button>
+
+        <div style="display: flex; flex-direction: column; gap: 22px;">
+          <div style="display: flex; flex-direction: column; gap: 10px; padding-right: 44px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.2em; color: #7fa8d8;">{{ modal.label }} · {{ modal.year }}</span>
+            <h3 style="margin: 0; font-size: clamp(22px, 3.2vw, 38px); font-weight: 200; line-height: 1.1; letter-spacing: -0.025em; color: #e6ebf1; text-wrap: pretty;">{{ modal.title }}</h3>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 14px;">
+            <sc-for list="{{ modal.metrics }}" as="m" hint-placeholder-count="2">
+              <div style="display: flex; flex-direction: column; gap: 3px; padding-top: 11px; border-top: 1px solid rgba(213,220,229,0.14);">
+                <span style="font-size: 21px; font-weight: 200; letter-spacing: -0.02em; color: #e6ebf1;">{{ m.v }}</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.13em; color: #8d95a1;">{{ m.k }}</span>
+              </div>
+            </sc-for>
+          </div>
+
+          <sc-for list="{{ modal.detail }}" as="d" hint-placeholder-count="3">
+            <div style="display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 20px; align-items: start; padding-top: 16px; border-top: 1px solid rgba(213,220,229,0.1);" data-modal-row="1">
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; color: #7fa8d8;">{{ d.h }}</span>
+              <p style="margin: 0; font-size: 15px; line-height: 1.7; color: #c3cad3; text-wrap: pretty;">{{ d.t }}</p>
+            </div>
+          </sc-for>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-top: 4px;">
+            <sc-for list="{{ modal.tech }}" as="tt" hint-placeholder-count="4">
+              <span style="padding: 5px 9px; border: 1px solid rgba(213,220,229,0.12); font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.08em; color: #8d95a1;">{{ tt }}</span>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+const CARD = "display: flex; flex-direction: column; gap: 12px; padding: 24px; border: 1px solid rgba(213,220,229,0.12); background: rgba(213,220,229,0.022); cursor: pointer; ";
+
+const CARDS = [
+  { id: "atlas", label: "ARAŞTIRMA", year: "2026", cspan: 2, rspan: 2, titleSize: "clamp(23px, 3vw, 36px)",
+    title: "TASM-UNet — MRI'dan inme lezyonu segmentasyonu",
+    summary: "U-Net iskeletine Mamba (SSM) ve spektral geçit blokları yerleştiren özgün 3D model.",
+    metrics: [{ key: "at0", v: "0.60", k: "DICE" }, { key: "at1", v: "2000×", k: "DAHA UCUZ" }],
+    tech: ["PyTorch", "MONAI", "Mamba", "FFT"],
+    detail: [
+      { h: "PROBLEM", t: "3D MRI hacimlerinde inme lezyonlarını segmente etmek, transformer tabanlı modellerin O(n²) dikkat maliyeti yüzünden pratikte erişilemez hale geliyordu. 197³ voksellik hacimlerde bellek ve süre, akademik donanımın sınırlarını aşıyordu." },
+      { h: "YAKLAŞIM", t: "U-Net iskeletini koruyup dikkat bloklarının yerine Mamba (durum uzayı) blokları ve frekans alanında çalışan spektral geçit mekanizması koydum. Kayıp fonksiyonu Dice + Focal Tversky + clDice kombinasyonu; clDice ince damar benzeri yapıların sürekliliğini koruyor." },
+      { h: "SONUÇ", t: "Karmaşıklık O(n) seviyesine indi, hesaplama maliyeti yaklaşık 2000 kat azaldı. ATLAS v2.0 üzerinde 0.60 Dice skoru ile nnU-Net ve TransUNet referanslarının üzerine çıktı." }
+    ] },
+  { id: "enerjisa", label: "ENERJİSA", year: "2026", cspan: 2, rspan: 1, titleSize: "clamp(18px, 2.1vw, 24px)",
+    title: "Video analizi ve PoC geliştirme",
+    summary: "Ham video setinin temizlenmesinden müşteride çalışan uygulamaya kadar uçtan uca sahiplik.",
+    metrics: [{ key: "en0", v: "9.000+", k: "VİDEO" }, { key: "en1", v: "1", k: "PoC TESLİM" }],
+    tech: ["PyTorch", "OpenCV", "CVAT"],
+    detail: [
+      { h: "PROBLEM", t: "Sahadan gelen dokuz binden fazla ham video, tutarsız çözünürlük, bozuk kare ve etiketsiz içerikle birlikte geldi. Kullanılabilir bir eğitim seti yoktu." },
+      { h: "YAKLAŞIM", t: "Bozuk kareleri ayıklayan bir ön işleme hattı kurdum, hassas etiketleme sürecini uçtan uca yönettim, ardından computer vision modellerini eğitip hiperparametre optimizasyonu yaptım." },
+      { h: "SONUÇ", t: "Müşteri tarafında çalıştırılabilen, tam donanımlı bir PoC uygulaması teslim edildi; model çıktıları saha ekibinin doğrudan kullandığı arayüzde görünür hale geldi." }
+    ] },
+  { id: "veri-hatti", label: "VERİ HATTI", year: "2026", cspan: 2, rspan: 1, titleSize: "clamp(18px, 2.1vw, 24px)",
+    title: "627.000 görsellik veri seti ve AI filtreleme",
+    summary: "Anti-bot sistemlerini aşan asenkron botlar, otomatik klasörleme ve iki sınıflandırma modeli.",
+    metrics: [{ key: "vh0", v: "627 B", k: "GÖRSEL" }, { key: "vh1", v: "45 GB", k: "VERİ SETİ" }],
+    tech: ["asyncio", "Selenium", "CNN"],
+    detail: [
+      { h: "PROBLEM", t: "Marka, model ve yıla göre etiketlenmiş büyük ölçekli bir araç görseli veri setine ihtiyaç vardı; kaynaklar agresif anti-bot koruması altındaydı." },
+      { h: "YAKLAŞIM", t: "Asenkron scraping botları yazdım: oturum rotasyonu, gecikme dağılımları ve tarayıcı parmak izi yönetimiyle koruma katmanlarını aştı. İndirilen görseller marka/model/yıl hiyerarşisine otomatik klasörlendi." },
+      { h: "SONUÇ", t: "45 GB'lık 627.000+ görsellik set oluştu. İki derin öğrenme modeli devreye alındı: biri alakasız çekim açılarını ayıklıyor, diğeri araç sınıflarını ayırt ediyor." }
+    ] },
+  { id: "portfolyo", label: "WEB", year: "2026", cspan: 2, rspan: 1, titleSize: "clamp(18px, 2.1vw, 24px)",
+    title: "Bu portföy sitesi",
+    summary: "Kaydırmaya bağlı WebGL sahnesi, tarayıcıda çalışan görüntü işleme demosu ve sunucusuz iletişim formu.",
+    metrics: [{ key: "pf0", v: "0", k: "HAZIR CV KİTİ" }, { key: "pf1", v: "60 fps", k: "HEDEF" }],
+    tech: ["three.js", "Canvas API", "WebGL"],
+    detail: [
+      { h: "PROBLEM", t: "Model eğitmekle çalışan bir ürün teslim etmek arasındaki farkı anlatmanın en dürüst yolu, portföyün kendisinin çalışan bir ürün olması." },
+      { h: "YAKLAŞIM", t: "Hero'daki işlemci videosu oynatılmıyor; kaydırma değeri yumuşatılıp doğrudan videonun zaman eksenine bağlanıyor. Arka plandaki anakart katmanı three.js ile üretilen PCB izleri ve izler boyunca akan ışık darbeleri. Laboratuvar bölümündeki konvolüsyon çekirdekleri saf JavaScript ile yazıldı, hiçbir görsel sunucuya gitmiyor." },
+      { h: "SONUÇ", t: "Tek sayfa, harici görüntü işleme kütüphanesi yok. Ekran dışındayken WebGL çizimi tamamen duruyor, devicePixelRatio 1.5 ile sınırlı, prefers-reduced-motion tüm hareketi kapatıyor." }
+    ] },
+  { id: "astor", label: "ASTOR", year: "2026", cspan: 1, rspan: 1, titleSize: "clamp(17px, 1.9vw, 21px)",
+    title: "Legacy sistem modernizasyonu",
+    summary: "Visual Basic masaüstü uygulamasının iş mantığı Flask mimarisine taşındı.",
+    metrics: [{ key: "as0", v: "VB → Web", k: "GEÇİŞ" }, { key: "as1", v: "0", k: "AUTOCAD BAĞI" }],
+    tech: ["Flask", "MSSQL"],
+    detail: [
+      { h: "PROBLEM", t: "Üretimde çalışan Visual Basic masaüstü uygulaması, belgelenmemiş veri tabanı şemaları ve Excel dosyaları üzerinden akan iş mantığıyla bakımı imkânsız hale gelmişti. Raporlama modülü AutoCAD kurulumuna bağımlıydı." },
+      { h: "YAKLAŞIM", t: "Şemaları ve veri akışlarını tersine mühendislikle çözümledim, iş mantığını modüler bir Flask mimarisine taşıdım. Raporlama, AutoCAD yerine sunucu tarafında dinamik PDF üreten bağımsız bir servise dönüştürüldü." },
+      { h: "SONUÇ", t: "Masaüstü kurulumu gerektirmeyen, tarayıcıdan erişilen bir sisteme geçildi; raporlar artık tek bir istekle üretiliyor." }
+    ] },
+  { id: "ethos", label: "ETHOS", year: "2025", cspan: 1, rspan: 1, titleSize: "clamp(17px, 1.9vw, 21px)",
+    title: "Kopyalanamaz PDF → metin",
+    summary: "Flask backend'i ile sıfırdan geliştirilen, akıllı metin çıkarımı yapan web servisi.",
+    metrics: [{ key: "et0", v: "Document AI", k: "ÇIKARIM" }, { key: "et1", v: "Web", k: "ARAYÜZ" }],
+    tech: ["Flask", "Python"],
+    detail: [
+      { h: "PROBLEM", t: "Kopyalamaya kapalı PDF belgelerinden yapılandırılmış metin çıkarmak gerekiyordu; standart metin katmanı okunamıyordu." },
+      { h: "YAKLAŞIM", t: "Flask tabanlı bir backend ve yükleme arayüzü geliştirdim, Google Document AI entegrasyonuyla sayfa görüntülerinden metin çıkarımı sağladım, dosya işleme akışını kuyruk mantığıyla optimize ettim." },
+      { h: "SONUÇ", t: "Kullanıcı belgeyi tarayıcıdan yüklüyor, çıkarılan metni yapılandırılmış biçimde geri alıyor." }
+    ] }
+];
+
+const STACK = [
+  { title: "GÖRÜNTÜ İŞLEME", items: "OpenCV · MONAI · konvolüsyon çekirdekleri · morfolojik işlemler · Otsu eşikleme · histogram eşitleme · 3D hacim segmentasyonu · CVAT ve X-AnyLabeling ile etiketleme" },
+  { title: "DERİN ÖĞRENME", items: "PyTorch · TensorFlow · U-Net · CNN · Transformer · Mamba (SSM) · spektral geçit · Dice / Focal Tversky / clDice · hiperparametre optimizasyonu · scikit-learn" },
+  { title: "BACKEND & FRONTEND", items: "Python · Flask · RESTful API · MSSQL · MySQL · SQL · C# · JavaScript · HTML/CSS · Canvas API · WebGL (three.js) · React Native ve Expo ile mobil" },
+  { title: "ARAÇLAR", items: "Docker · Git · asyncio · Selenium · BeautifulSoup · Google Document AI · Colab Pro+ · MATLAB" }
+];
+
+const COLUMNS = [
+  { head: "DENEYİM", rows: [
+    { date: "2025 — devam", role: "Yapay Zekâ / Görüntü İşleme Mühendisi", org: "Bomensoft", city: "Ankara", hasSub: true, sub: [
+      { n: "Enerjisa", d: "Video analizi ve PoC geliştirme — 9.000+ videoluk setin temizlenmesi, etiketleme ve model eğitimi." },
+      { n: "Astor", d: "Legacy Visual Basic sisteminin Flask mimarisine taşınması, AutoCAD bağımlı raporlamanın web servisine dönüştürülmesi." },
+      { n: "Bağımsız projeler", d: "627.000 görsellik veri hattı, PDF → metin çıkarım servisi ve TASM-UNet segmentasyon araştırması." }
+    ] }
+  ] },
+  { head: "EĞİTİM", rows: [
+    { date: "9 ay · mezun", role: "Veri Bilimi ve Yapay Zekâ", org: "Marmara Üniversitesi", city: "İstanbul", note: "YÖK ONAYLI PROGRAM" },
+    { date: "2022 — 2026", role: "Bilgisayar Mühendisliği · GPA 3.30", org: "Selçuk Üniversitesi", city: "Konya" }
+  ] }
+];
+
+const NAV = [
+  { id: "calismalar", label: "Çalışmalar" },
+  { id: "teknik", label: "Teknik" },
+  { id: "deneyim", label: "Deneyim" },
+  { id: "lab", label: "Lab" },
+  { id: "iletisim", label: "İletişim" }
+];
+
+const OPS = [
+  { k: "gray", n: "Gri Tonlama" },
+  { k: "blur", n: "Bulanıklaştırma" },
+  { k: "sobel", n: "Sobel Kenar" },
+  { k: "thresh", n: "Eşikleme" },
+  { k: "heq", n: "Histogram Eşitleme" }
+];
+
+class Component extends DCLogic {
+  state = { active: "calismalar", op: "sobel", radius: 2, thresh: 96, open: null, sending: false, status: "" };
+
+  componentDidMount() {
+    document.documentElement.lang = "tr";
+    this._reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    this._mobile = window.matchMedia && window.matchMedia("(max-width: 760px), (pointer: coarse)").matches;
+    this.fit();
+    this.setupReveal();
+    this.setupScroll();
+    this.setupVideo();
+    this.loadThree();
+    this.initLab();
+    this._labWatch = setInterval(() => { this.ensureLab(); this.paintNav(); }, 400);
+    this._onKey = (e) => {
+      if (e.key === "Escape" && this.state.open) this.closeModal();
+      if (e.key === "Tab" && this.state.open) this.trap(e);
+    };
+    window.addEventListener("keydown", this._onKey);
+    const h = (location.hash || "").replace("#", "");
+    if (h && CARDS.some((c) => c.id === h)) setTimeout(() => this.openModal(h), 120);
+  }
+
+  componentWillUnmount() {
+    this._dead = true;
+    if (this._raf) cancelAnimationFrame(this._raf);
+    if (this._pcbRaf) cancelAnimationFrame(this._pcbRaf);
+    if (this._io) this._io.disconnect();
+    if (this._pcbIo) this._pcbIo.disconnect();
+    if (this._labWatch) clearInterval(this._labWatch);
+    if (this._blobUrl) URL.revokeObjectURL(this._blobUrl);
+    window.removeEventListener("scroll", this._onScroll);
+    window.removeEventListener("resize", this._onResize);
+    window.removeEventListener("keydown", this._onKey);
+  }
+
+  componentDidUpdate() {
+    this.setupReveal();
+    this.ensureLab();
+    if (this.state.open && !this._focused) {
+      const b = document.getElementById("modalClose");
+      const panel = document.getElementById("modalPanel");
+      if (panel && window.gsap) window.gsap.fromTo(panel, { scale: 0.97, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.35, ease: "power3.out" });
+      if (b) { b.focus(); this._focused = true; }
+    }
+    if (!this.state.open) this._focused = false;
+    this.paintNav();
+  }
+
+  fit() {
+    const apply = () => {
+      const w = window.innerWidth;
+      document.querySelectorAll("[data-wide]").forEach((el) => { el.style.display = w > 860 ? "" : "none"; });
+      const grid = document.querySelector("[data-bento]");
+      if (grid) {
+        const cols = w > 1000 ? 4 : w > 640 ? 2 : 1;
+        grid.style.gridTemplateColumns = "repeat(" + cols + ", minmax(0, 1fr))";
+        grid.querySelectorAll("article").forEach((a) => {
+          a.style.gridColumn = "span " + Math.min(parseInt(a.getAttribute("data-cspan") || "1", 10), cols);
+          a.style.gridRow = cols < 4 ? "span 1" : "span " + (a.getAttribute("data-rspan") || 1);
+        });
+      }
+      const narrow = w <= 760;
+      document.querySelectorAll("[data-stack-row]").forEach((r) => { r.style.gridTemplateColumns = narrow ? "minmax(0, 1fr)" : "210px minmax(0, 1fr)"; r.style.gap = narrow ? "8px" : "22px"; });
+      document.querySelectorAll("[data-modal-row]").forEach((r) => { r.style.gridTemplateColumns = narrow ? "minmax(0, 1fr)" : "132px minmax(0, 1fr)"; r.style.gap = narrow ? "8px" : "20px"; });
+      const DESKTOP = {
+        "[data-two-col]": "1fr 1fr",
+        "[data-lab-ctl]": "minmax(0, 1.4fr) minmax(0, 1fr)",
+        "[data-contact-grid]": "minmax(0, 1.15fr) minmax(0, 1fr)"
+      };
+      Object.keys(DESKTOP).forEach((sel) => {
+        document.querySelectorAll(sel).forEach((el) => { el.style.gridTemplateColumns = narrow ? "minmax(0, 1fr)" : DESKTOP[sel]; });
+      });
+      const hero = document.getElementById("top");
+      if (hero) hero.style.height = this._mobile ? "100vh" : "130vh";
+      const lab = document.querySelector("[data-lab-grid]");
+      if (lab) lab.style.gridTemplateColumns = w < 900 ? "minmax(0, 1fr)" : "1fr 1fr";
+      const nav = document.getElementById("navWrap");
+      if (nav) nav.style.justifyContent = w > 1080 ? "center" : "flex-start";
+    };
+    apply();
+    this._onResize = () => { apply(); if (this._pcbResize) this._pcbResize(); };
+    window.addEventListener("resize", this._onResize);
+  }
+
+  // The DC runtime can replace DOM nodes on any re-render, which orphans ScrollTrigger
+  // instances and any DOM-attribute guard. So reveal state lives here, keyed by a stable
+  // string, and every render re-binds triggers against the CURRENT live nodes.
+  setupReveal() {
+    if (!window.gsap || !window.ScrollTrigger) { setTimeout(() => this.setupReveal(), 120); return; }
+    const gsap = window.gsap;
+    const ST = window.ScrollTrigger;
+    if (!this._gsapReady) {
+      gsap.registerPlugin(ST);
+      this._gsapReady = true;
+      this._shown = {};
+      this._counted = {};
+      if (this._reduced) gsap.globalTimeline.pause();
+    }
+    if (this._bindQueued) return;
+    this._bindQueued = true;
+    requestAnimationFrame(() => { this._bindQueued = false; this.bindReveal(); });
+  }
+
+  revealKey(el, i) {
+    return el.getAttribute("data-id") || (el.id ? "#" + el.id : "") ||
+      (el.closest("section") ? el.closest("section").id : "x") + ":" + i;
+  }
+
+  // ScrollTrigger's cached scroll position desyncs inside this host (measured t.scroll()
+  // 3000 while window.scrollY was 4085) and re-binds kill its instances, so the page's own
+  // scroll handler decides WHEN; GSAP still owns every tween.
+  bindReveal() {
+    if (this._dead || !window.gsap) return;
+    const gsap = window.gsap;
+    const nodes = [].slice.call(document.querySelectorAll("[data-reveal]"));
+
+    this._watch = [];
+    nodes.forEach((el, i) => {
+      const key = this.revealKey(el, i);
+      el.__rk = key;
+      if (this._shown[key]) { gsap.set(el, { opacity: 1, y: 0 }); return; }
+      gsap.set(el, { opacity: 0, y: el.tagName === "ARTICLE" ? 20 : 18 });
+      this._watch.push(el);
+    });
+
+    document.querySelectorAll("[data-bento] article").forEach((el) => this.cardHover(el));
+    this.bindCounters();
+    this.checkReveal();
+  }
+
+  checkReveal() {
+    if (this._dead || !window.gsap) return;
+    const gsap = window.gsap;
+    const band = window.innerHeight * 0.9;
+
+    if (this._watch && this._watch.length) {
+      const hits = this._watch.filter((el) => el.isConnected && el.getBoundingClientRect().top < band);
+      if (hits.length) {
+        this._watch = this._watch.filter((el) => hits.indexOf(el) < 0);
+        hits.forEach((el) => { this._shown[el.__rk] = 1; });
+        const cards = hits.filter((el) => el.tagName === "ARTICLE");
+        const rest = hits.filter((el) => el.tagName !== "ARTICLE");
+        if (cards.length) gsap.to(cards, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", stagger: 0.06, overwrite: true });
+        if (rest.length) gsap.to(rest, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", overwrite: true });
+      }
+    }
+
+    if (this._cWatch && this._cWatch.length) {
+      const cb = window.innerHeight * 0.94;
+      const hit = this._cWatch.filter((c) => c.el.isConnected && c.el.getBoundingClientRect().top < cb);
+      if (hit.length) {
+        this._cWatch = this._cWatch.filter((c) => hit.indexOf(c) < 0);
+        hit.forEach((c) => {
+          const o = { v: 0 };
+          gsap.to(o, {
+            v: c.spec.target, duration: 0.6, ease: "power2.out",
+            onUpdate: () => { c.el.textContent = c.spec.pre + (c.spec.isFloat ? o.v.toFixed(2) : Math.round(o.v).toLocaleString("tr-TR")) + c.spec.suf; },
+            onComplete: () => { c.spec.done = 1; c.el.textContent = c.spec.full; }
+          });
+        });
+      }
+    }
+  }
+
+  cardHover(el) {
+    if (el.__hov) return;
+    el.__hov = 1;
+    const gsap = window.gsap;
+    el.addEventListener("pointerenter", () => gsap.to(el, { y: -4, borderColor: "rgba(213,220,229,0.34)", backgroundColor: "rgba(213,220,229,0.05)", duration: 0.35, ease: "power2.out" }));
+    el.addEventListener("pointerleave", () => gsap.to(el, { y: 0, borderColor: "rgba(213,220,229,0.12)", backgroundColor: "rgba(213,220,229,0.022)", duration: 0.4, ease: "power2.out" }));
+  }
+
+  bindCounters() {
+    this._cWatch = [];
+    document.querySelectorAll("[data-bento] article [data-count]").forEach((el) => {
+      const key = el.getAttribute("data-count") || "";
+      const spec = this._counted[key] || this.parseCount(el.textContent.trim());
+      if (!spec) return;
+      this._counted[key] = spec;
+      if (spec.done) { el.textContent = spec.full; return; }
+      el.textContent = spec.pre + (spec.isFloat ? "0.00" : "0") + spec.suf;
+      this._cWatch.push({ el: el, spec: spec });
+    });
+  }
+
+  parseCount(raw) {
+    const m = raw.match(/^([^\d]*)([\d.,]+)(.*)$/);
+    if (!m) return null;
+    const isFloat = m[2].indexOf(".") >= 0 && m[2].indexOf(",") < 0;
+    const target = parseFloat(m[2].replace(",", "."));
+    if (!isFinite(target)) return null;
+    return { pre: m[1], suf: m[3], isFloat: isFloat, target: target, full: raw, done: 0 };
+  }
+
+  setupScroll() {
+    const hero = document.getElementById("top");
+    const vLayer = document.getElementById("videoLayer");
+    const pcb = document.getElementById("pcbLayer");
+    const copy = document.getElementById("heroCopy");
+    const hint = document.getElementById("scrollHint");
+
+    this._onScroll = () => {
+      const span = Math.max(1, hero.offsetHeight - window.innerHeight);
+      const p = this._mobile ? 0 : Math.min(1, Math.max(0, window.scrollY / span));
+      this._target = p;
+
+      const ramp = (a, b) => Math.max(0, Math.min(1, (p - a) / (b - a)));
+      const out = ramp(0.85, 1);
+      const past = window.scrollY > (hero.offsetHeight - window.innerHeight * 0.6);
+
+      if (vLayer) {
+        const o = this._mobile ? (past ? 0 : 1) : 1 - out;
+        vLayer.style.opacity = o.toFixed(3);
+        if (!this._reduced && !this._mobile) {
+          vLayer.style.transform = "translate3d(" + (-out * 12).toFixed(2) + "vw, 0, 0) scale(" + (1 - out * 0.1).toFixed(3) + ")";
+        }
+        vLayer.style.visibility = o < 0.01 ? "hidden" : "visible";
+      }
+      if (pcb) {
+        const rise = this._mobile ? (past ? 1 : 0) : ramp(0.82, 1);
+        const vOp = this._mobile ? (past ? 0 : 1) : 1 - out;
+        pcb.style.opacity = (0.36 * rise * (1 - vOp * 0.95)).toFixed(4);
+      }
+      if (copy && !this._mobile) {
+        copy.style.opacity = (1 - ramp(0.86, 1)).toFixed(3);
+        copy.style.transform = "translate(" + (-ramp(0.86, 1) * 40).toFixed(1) + "px, -50%)";
+      }
+      if (hint) hint.style.opacity = (1 - ramp(0.05, 0.2)).toFixed(2);
+
+      this.spy();
+      this.checkReveal();
+    };
+    window.addEventListener("scroll", this._onScroll, { passive: true });
+    this._onScroll();
+  }
+
+  spy() {
+    const probe = window.innerHeight * 0.38;
+    let active = this.state.active;
+    NAV.forEach((n) => {
+      const el = document.getElementById(n.id);
+      if (el && el.getBoundingClientRect().top <= probe) active = n.id;
+    });
+    this._activeId = active;
+    this.paintNav();
+  }
+
+  // state-driven nav styling does not survive this runtime's re-renders, so the active
+  // item is painted directly and re-applied after every render
+  paintNav() {
+    const active = this._activeId || this.state.active || NAV[0].id;
+    document.querySelectorAll("[data-nav]").forEach((b) => {
+      b.style.color = b.getAttribute("data-nav") === active ? "#e6ebf1" : "#8d95a1";
+    });
+    this.moveNavPill(active);
+  }
+
+  moveNavPill(id) {
+    const gsap = window.gsap;
+    const btn = document.querySelector('[data-nav="' + id + '"]');
+    const pill = document.getElementById("navPill");
+    if (!gsap || !btn || !pill) return;
+    const p = btn.parentElement.getBoundingClientRect();
+    const b = btn.getBoundingClientRect();
+    if (!b.width) { requestAnimationFrame(() => this.moveNavPill(id)); return; }
+    const x = b.left - p.left;
+    // a re-render hands back a fresh 0-width node — seed it, then tween on later moves
+    if (!pill.getBoundingClientRect().width || pill.__seed !== 1) {
+      pill.__seed = 1;
+      gsap.set(pill, { x: x, width: b.width, opacity: 1 });
+      return;
+    }
+    gsap.to(pill, { x: x, width: b.width, opacity: 1, duration: 0.4, ease: "power3.out", overwrite: "auto" });
+  }
+
+  goTo(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + window.scrollY - 84;
+    window.scrollTo({ top: y, behavior: this._reduced ? "auto" : "smooth" });
+  }
+
+  // ---------- hero video ----------
+
+  setupVideo() {
+    const v = document.getElementById("heroVideo");
+    if (!v) return;
+    if (this._mobile) return; // iOS Safari cannot be scroll-scrubbed reliably — poster only
+
+    v.pause();
+    v.addEventListener("play", () => v.pause());
+    this._seekable = false;
+    const f = document.getElementById("vFrame");
+
+    // the static host answers 200 with no Range support, so a plain src can never seek
+    fetch("uploads/islemci-web_2.mp4").then((r) => r.blob()).then((blob) => {
+      if (this._dead) return;
+      this._blobUrl = URL.createObjectURL(blob);
+      return new Promise((res) => {
+        const ready = () => { v.removeEventListener("loadeddata", ready); res(); };
+        v.addEventListener("loadeddata", ready);
+        v.src = this._blobUrl;
+        v.load();
+      });
+    }).then(() => {
+      if (this._dead) return;
+      v.pause();
+      this._seekable = true;
+      const d = document.getElementById("vDur");
+      if (d && v.duration) d.textContent = v.duration.toFixed(1);
+    }).catch(() => { if (f) f.textContent = "—"; });
+
+    this._cur = 0;
+    this._target = 0;
+    const tick = () => {
+      if (this._dead) return;
+      this._raf = requestAnimationFrame(tick);
+      if (!this._seekable || this._reduced) return;
+      this._cur += ((this._target || 0) - this._cur) * 0.08;
+      const dur = v.duration;
+      if (!dur || !isFinite(dur)) return;
+      const t = Math.min(dur - 0.05, Math.max(0, this._cur * dur));
+      if (v.readyState >= 2 && Math.abs(v.currentTime - t) > 0.012) {
+        try { v.currentTime = t; } catch (e) {}
+      }
+      if (f) f.textContent = v.currentTime.toFixed(1);
+    };
+    tick();
+  }
+
+  // ---------- PCB background ----------
+
+  loadThree() {
+    if (this._dead) return;
+    if (window.THREE) { this.initPcb(); return; }
+    if (!window.__pfThree) {
+      window.__pfThree = true;
+      const s = document.createElement("script");
+      s.src = "https://cdn.jsdelivr.net/npm/three@0.134.0/build/three.min.js";
+      document.head.appendChild(s);
+    }
+    setTimeout(() => this.loadThree(), 140);
+  }
+
+  makeTraces(W, H) {
+    const STEP = 26;
+    const cols = Math.ceil(W / STEP), rows = Math.ceil(H / STEP);
+    const pos = [], dist = [], trace = [], vias = [];
+    let tIdx = 0;
+    const count = Math.round((cols * rows) / 26);
+    for (let t = 0; t < count; t++) {
+      let horiz = Math.random() < 0.5;
+      let d = 0;
+      let px = Math.floor(Math.random() * cols) * STEP - W / 2;
+      let py = Math.floor(Math.random() * rows) * STEP - H / 2;
+      vias.push(px, py, 0);
+      const legs = 3 + Math.floor(Math.random() * 8);
+      for (let l = 0; l < legs; l++) {
+        const len = (1 + Math.floor(Math.random() * 4)) * STEP * (Math.random() < 0.5 ? -1 : 1);
+        let nx = px, ny = py;
+        if (horiz) nx = px + len; else ny = py + len;
+        if (Math.abs(nx) > W / 2 || Math.abs(ny) > H / 2) { horiz = !horiz; continue; }
+        pos.push(px, py, 0, nx, ny, 0);
+        dist.push(d, d + Math.abs(len));
+        trace.push(tIdx, tIdx);
+        d += Math.abs(len);
+        px = nx; py = ny;
+        vias.push(px, py, 0);
+        if (Math.random() < 0.82) horiz = !horiz;
+      }
+      tIdx++;
+    }
+    return { pos: pos, dist: dist, trace: trace, vias: vias };
+  }
+
+  initPcb() {
+    if (this._pcbDone) return;
+    const THREE = window.THREE;
+    const canvas = document.getElementById("pcbCanvas");
+    if (!canvas) return;
+    this._pcbDone = true;
+
+    const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    renderer.setClearColor(0x000000, 0);
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, -100, 100);
+
+    const W = Math.max(1500, Math.round(window.innerWidth * 1.5));
+    const H = Math.max(1300, Math.round(window.innerHeight * 1.8));
+    const T = this.makeTraces(W, H);
+
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.Float32BufferAttribute(T.pos, 3));
+    geo.setAttribute("aDist", new THREE.Float32BufferAttribute(T.dist, 1));
+    geo.setAttribute("aTrace", new THREE.Float32BufferAttribute(T.trace, 1));
+
+    const mat = new THREE.ShaderMaterial({
+      transparent: true,
+      uniforms: {
+        uBase: { value: new THREE.Color(0x7fc4ff) },
+        uPulse: { value: new THREE.Color(0xf2faff) },
+        uTime: { value: 0 }
+      },
+      vertexShader: [
+        "attribute float aDist;",
+        "attribute float aTrace;",
+        "varying float vDist;",
+        "varying float vTrace;",
+        "void main() {",
+        "  vDist = aDist; vTrace = aTrace;",
+        "  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);",
+        "}"
+      ].join("\n"),
+      fragmentShader: [
+        "uniform vec3 uBase;",
+        "uniform vec3 uPulse;",
+        "uniform float uTime;",
+        "varying float vDist;",
+        "varying float vTrace;",
+        "float hash(float n) { return fract(sin(n * 12.9898) * 43758.5453); }",
+        "void main() {",
+        "  float h = hash(vTrace);",
+        "  float h2 = hash(vTrace + 7.31);",
+        "  float cycle = 760.0 + h * 700.0;",
+        "  float speed = 118.0 + h2 * 92.0;",
+        "  float head = mod(uTime * speed + h * cycle, cycle);",
+        "  float glow = exp(-abs(vDist - head) / 44.0) * step(vDist - head, 20.0);",
+        "  float head2 = mod(uTime * speed + h2 * cycle + cycle * 0.5, cycle);",
+        "  glow += 0.8 * exp(-abs(vDist - head2) / 44.0) * step(vDist - head2, 20.0);",
+        "  glow = clamp(glow * 1.5, 0.0, 1.0);",
+        "  gl_FragColor = vec4(mix(uBase, uPulse, glow), 0.42 + glow * 0.58);",
+        "}"
+      ].join("\n")
+    });
+
+    const group = new THREE.Group();
+    group.add(new THREE.LineSegments(geo, mat));
+    const vg = new THREE.BufferGeometry();
+    vg.setAttribute("position", new THREE.Float32BufferAttribute(T.vias, 3));
+    group.add(new THREE.Points(vg, new THREE.PointsMaterial({ color: 0xa8dcff, size: 2.4, sizeAttenuation: false, transparent: true, opacity: 0.9 })));
+    scene.add(group);
+
+    this._pcb = { renderer: renderer, scene: scene, camera: camera, group: group, mat: mat };
+
+    this._pcbResize = () => {
+      const w = window.innerWidth, h = window.innerHeight;
+      renderer.setSize(w, h, false);
+      camera.left = -w / 2; camera.right = w / 2; camera.top = h / 2; camera.bottom = -h / 2;
+      camera.updateProjectionMatrix();
+      this.renderPcb();
+    };
+    this._pcbResize();
+
+    this._pcbVisible = false;
+    this._pcbIo = new IntersectionObserver((es) => {
+      this._pcbVisible = es.some((e) => e.isIntersecting);
+      if (this._pcbVisible) this.startPcb();
+    }, { rootMargin: "20% 0px" });
+    [document.getElementById("shiftPanel"), document.getElementById("below")].forEach((el) => { if (el) this._pcbIo.observe(el); });
+
+    if (this._reduced) { this.renderPcb(); return; }
+    this.startPcb();
+  }
+
+  startPcb() {
+    if (this._reduced || this._pcbRaf || !this._pcb) return;
+    const step = () => {
+      if (this._dead || !this._pcbVisible) { this._pcbRaf = null; return; }
+      this._pcbRaf = requestAnimationFrame(step);
+      this._pcb.mat.uniforms.uTime.value = performance.now() / 1000;
+      this.renderPcb();
+    };
+    this._pcbVisible = true;
+    step();
+  }
+
+  renderPcb() {
+    if (!this._pcb) return;
+    this._pcb.group.position.y = (window.scrollY * 0.03) % 26;
+    this._pcb.renderer.render(this._pcb.scene, this._pcb.camera);
+  }
+
+  // ---------- image lab (pure canvas) ----------
+
+  // canvases can be replaced by a re-render (losing their bitmap) and setState callbacks
+  // are not available — a cheap watchdog keeps the lab in sync with state either way
+  ensureLab() {
+    if (this._dead || !this._srcData) return;
+    const outC = document.getElementById("labOut");
+    if (!outC) return;
+    const sig = this.state.op + "|" + this.state.radius + "|" + this.state.thresh;
+    if (outC === this._paintedTo && sig === this._sig && outC.width === this._LW) return;
+    this.paintLab();
+  }
+
+  initLab() {
+    const src = document.getElementById("labSrc");
+    if (!src) { setTimeout(() => this.initLab(), 150); return; }
+    this._LW = 620; this._LH = 380;
+    src.width = this._LW; src.height = this._LH;
+    const out = document.getElementById("labOut");
+    if (out) { out.width = this._LW; out.height = this._LH; }
+
+    const drop = document.getElementById("labDrop");
+    if (drop) {
+      ["dragenter", "dragover"].forEach((k) => drop.addEventListener(k, (e) => { e.preventDefault(); drop.style.borderColor = "rgba(127,168,216,0.6)"; }));
+      ["dragleave", "drop"].forEach((k) => drop.addEventListener(k, (e) => { e.preventDefault(); drop.style.borderColor = "rgba(213,220,229,0.12)"; }));
+      drop.addEventListener("drop", (e) => {
+        const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file) this.loadImage(file);
+      });
+    }
+
+    const img = new Image();
+    img.onload = () => { this.setSource(img); };
+    img.onerror = () => { this.setSource(null); };
+    img.src = "assets/lab-sample.jpg";
+  }
+
+  loadImage(file) {
+    const img = new Image();
+    img.onload = () => { this.setSource(img); URL.revokeObjectURL(img.src); };
+    img.src = URL.createObjectURL(file);
+  }
+
+  setSource(img) {
+    this._img = img;
+    this.paintLab();
+  }
+
+  paintLab() {
+    const img = this._img;
+    const c = document.getElementById("labSrc");
+    if (!c) return;
+    c.width = this._LW; c.height = this._LH;
+    const outC = document.getElementById("labOut");
+    if (outC) { outC.width = this._LW; outC.height = this._LH; }
+    const x = c.getContext("2d");
+    x.fillStyle = "#04050a";
+    x.fillRect(0, 0, this._LW, this._LH);
+    if (img) {
+      const s = Math.max(this._LW / img.width, this._LH / img.height);
+      const w = img.width * s, h = img.height * s;
+      x.drawImage(img, (this._LW - w) / 2, (this._LH - h) / 2, w, h);
+    } else {
+      for (let i = 0; i < 90; i++) {
+        x.strokeStyle = "rgba(180,190,205," + (0.15 + Math.random() * 0.5) + ")";
+        x.lineWidth = 1 + Math.random() * 2;
+        x.beginPath();
+        x.moveTo(Math.random() * this._LW, Math.random() * this._LH);
+        x.lineTo(Math.random() * this._LW, Math.random() * this._LH);
+        x.stroke();
+      }
+    }
+    this._srcData = x.getImageData(0, 0, this._LW, this._LH);
+    this.runOp();
+  }
+
+  gray(d) {
+    const g = new Float32Array(d.length / 4);
+    for (let i = 0, j = 0; i < d.length; i += 4, j++) g[j] = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+    return g;
+  }
+
+  boxBlur(g, W, H, r) {
+    if (r < 1) return g;
+    const tmp = new Float32Array(g.length), out = new Float32Array(g.length);
+    for (let y = 0; y < H; y++) {
+      let acc = 0;
+      for (let k = -r; k <= r; k++) acc += g[y * W + Math.min(W - 1, Math.max(0, k))];
+      for (let x = 0; x < W; x++) {
+        tmp[y * W + x] = acc / (2 * r + 1);
+        const add = g[y * W + Math.min(W - 1, x + r + 1)];
+        const sub = g[y * W + Math.max(0, x - r)];
+        acc += add - sub;
+      }
+    }
+    for (let x = 0; x < W; x++) {
+      let acc = 0;
+      for (let k = -r; k <= r; k++) acc += tmp[Math.min(H - 1, Math.max(0, k)) * W + x];
+      for (let y = 0; y < H; y++) {
+        out[y * W + x] = acc / (2 * r + 1);
+        const add = tmp[Math.min(H - 1, y + r + 1) * W + x];
+        const sub = tmp[Math.max(0, y - r) * W + x];
+        acc += add - sub;
+      }
+    }
+    return out;
+  }
+
+  runOp() {
+    const outC = document.getElementById("labOut");
+    if (!outC || !this._srcData) return;
+    const W = this._LW, H = this._LH;
+    const t0 = performance.now();
+    const sd = this._srcData.data;
+    const img = new ImageData(W, H);
+    const od = img.data;
+    const op = this.state.op;
+    const put = (g) => { for (let i = 0, j = 0; j < g.length; i += 4, j++) { const v = g[j] < 0 ? 0 : g[j] > 255 ? 255 : g[j]; od[i] = od[i + 1] = od[i + 2] = v; od[i + 3] = 255; } };
+    const g0 = this.gray(sd);
+
+    if (op === "gray") {
+      put(g0);
+    } else if (op === "blur") {
+      put(this.boxBlur(g0, W, H, this.state.radius));
+    } else if (op === "sobel") {
+      const g = this.boxBlur(g0, W, H, Math.max(0, this.state.radius - 1));
+      const m = new Float32Array(g.length);
+      for (let y = 1; y < H - 1; y++) for (let x = 1; x < W - 1; x++) {
+        const i = y * W + x;
+        const gx = -g[i - W - 1] - 2 * g[i - 1] - g[i + W - 1] + g[i - W + 1] + 2 * g[i + 1] + g[i + W + 1];
+        const gy = -g[i - W - 1] - 2 * g[i - W] - g[i - W + 1] + g[i + W - 1] + 2 * g[i + W] + g[i + W + 1];
+        m[i] = Math.sqrt(gx * gx + gy * gy);
+      }
+      const t = this.state.thresh;
+      for (let i = 0, j = 0; j < m.length; i += 4, j++) {
+        const v = Math.min(1, m[j] / Math.max(12, t));
+        od[i] = 20 + v * 110; od[i + 1] = 50 + v * 165; od[i + 2] = 80 + v * 175; od[i + 3] = 255;
+      }
+    } else if (op === "thresh") {
+      const t = this.state.thresh;
+      const b = new Float32Array(g0.length);
+      for (let i = 0; i < g0.length; i++) b[i] = g0[i] > t ? 255 : 0;
+      put(b);
+    } else if (op === "heq") {
+      const h = new Array(256).fill(0);
+      for (let i = 0; i < g0.length; i++) h[Math.min(255, Math.max(0, Math.round(g0[i])))]++;
+      const cdf = new Array(256);
+      let acc = 0;
+      for (let i = 0; i < 256; i++) { acc += h[i]; cdf[i] = (acc / g0.length) * 255; }
+      const o = new Float32Array(g0.length);
+      for (let i = 0; i < g0.length; i++) o[i] = cdf[Math.min(255, Math.max(0, Math.round(g0[i])))];
+      put(o);
+    }
+
+    outC.getContext("2d").putImageData(img, 0, 0);
+    this._paintedTo = outC;
+    this._sig = op + "|" + this.state.radius + "|" + this.state.thresh;
+    const ms = performance.now() - t0;
+    const el = document.getElementById("labMs");
+    if (el) el.textContent = ms.toFixed(1) + " ms";
+    this.drawHist(img);
+  }
+
+  drawHist(img) {
+    const c = document.getElementById("labHist");
+    if (!c) return;
+    const W = c.clientWidth || 300, H = 78;
+    c.width = W; c.height = H;
+    const x = c.getContext("2d");
+    x.clearRect(0, 0, W, H);
+    const h = new Array(256).fill(0), d = img.data;
+    for (let i = 0; i < d.length; i += 4) h[Math.min(255, Math.round(0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2]))]++;
+    const max = Math.max.apply(null, h) || 1;
+    const g = x.createLinearGradient(0, 0, W, 0);
+    g.addColorStop(0, "rgba(127,168,216,0.9)");
+    g.addColorStop(1, "rgba(168,220,255,0.9)");
+    x.fillStyle = g;
+    for (let i = 0; i < 256; i++) {
+      const bh = Math.pow(h[i] / max, 0.42) * H;
+      x.fillRect((i / 256) * W, H - bh, W / 256 + 0.6, bh);
+    }
+  }
+
+  // ---------- modal ----------
+
+  openModal(id) {
+    this.setState({ open: id });
+    try { history.replaceState(null, "", "#" + id); } catch (e) {}
+  }
+
+  closeModal() {
+    const panel = document.getElementById("modalPanel");
+    const done = () => {
+      this.setState({ open: null });
+      try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+    };
+    if (panel && window.gsap && !this._reduced) {
+      window.gsap.to(panel, { scale: 0.97, opacity: 0, duration: 0.28, ease: "power2.in", onComplete: done });
+    } else done();
+  }
+
+  trap(e) {
+    const panel = document.getElementById("modalPanel");
+    if (!panel) return;
+    const f = panel.querySelectorAll("button, a[href], input, textarea, [tabindex]:not([tabindex='-1'])");
+    if (!f.length) return;
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+
+  // ---------- contact ----------
+
+  submit(e) {
+    e.preventDefault();
+    if (this.state.sending) return;
+    const form = e.target;
+    const data = {
+      name: form.name.value.trim(),
+      email: form.email.value.trim(),
+      message: form.message.value.trim()
+    };
+    this.setState({ sending: true, status: "sending" });
+    fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    }).then((r) => {
+      if (!r.ok) throw new Error("http " + r.status);
+      this.setState({ sending: false, status: "ok" });
+      form.reset();
+    }).catch(() => {
+      this.setState({ sending: false, status: "err" });
+    });
+  }
+
+  pill() {
+    return "position: relative; z-index: 1; padding: 7px 14px; border-radius: 999px; border: 1px solid transparent; background: transparent; color: #8d95a1; cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.1em; white-space: nowrap; transition: color .25s ease;";
+  }
+
+  opStyle(active) {
+    return "padding: 7px 12px; border: 1px solid " + (active ? "rgba(127,168,216,0.6)" : "rgba(213,220,229,0.12)") +
+      "; background: " + (active ? "rgba(127,168,216,0.14)" : "transparent") +
+      "; color: " + (active ? "#e6ebf1" : "#8d95a1") +
+      "; cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.06em; transition: all .2s ease;";
+  }
+
+  renderVals() {
+    const st = this.state;
+    const card = CARDS.find((c) => c.id === st.open) || null;
+    const needsRadius = st.op === "blur" || st.op === "sobel";
+    const needsThresh = st.op === "thresh" || st.op === "sobel";
+    const sliders = [];
+    if (needsRadius) sliders.push({ label: "YARIÇAP", min: 1, max: 8, step: 1, value: st.radius, set: (e) => this.setState({ radius: +e.target.value }) });
+    if (needsThresh) sliders.push({ label: st.op === "sobel" ? "KENAR EŞİĞİ" : "EŞİK", min: 8, max: 240, step: 1, value: st.thresh, set: (e) => this.setState({ thresh: +e.target.value }) });
+
+    const statusMap = {
+      sending: { t: "Gönderiliyor…", c: "#8d95a1" },
+      ok: { t: "Mesajın ulaştı. En kısa sürede döneceğim.", c: "#8fd0a8" },
+      err: { t: "Gönderilemedi. Doğrudan e-posta yazabilirsin.", c: "#e0a0a0" }
+    };
+    const s = statusMap[st.status];
+
+    return {
+      nav: NAV.map((n) => ({
+        id: n.id, label: n.label, style: this.pill(), go: () => this.goTo(n.id),
+        over: (e) => { if (window.gsap) window.gsap.to(e.currentTarget, { scale: 1.06, duration: 0.25, ease: "power2.out" }); },
+        out: (e) => { if (window.gsap) window.gsap.to(e.currentTarget, { scale: 1, duration: 0.3, ease: "power2.out" }); }
+      })),
+      cards: CARDS.map((c) => Object.assign({}, c, {
+        style: CARD + "grid-column: span " + c.cspan + "; grid-row: span " + c.rspan + ";",
+        open: () => this.openModal(c.id),
+        key: (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); this.openModal(c.id); } }
+      })),
+      stack: STACK,
+      columns: COLUMNS,
+      ops: OPS.map((o) => ({ n: o.n, style: this.opStyle(st.op === o.k), pick: () => this.setState({ op: o.k }) })),
+      sliders: sliders,
+      onPick: (e) => { const f = e.target.files && e.target.files[0]; if (f) this.loadImage(f); },
+      modal: card,
+      closeModal: () => this.closeModal(),
+      stop: (e) => e.stopPropagation(),
+      onSubmit: (e) => this.submit(e),
+      sending: st.sending,
+      submitLabel: st.sending ? "GÖNDERİLİYOR…" : "GÖNDER",
+      submitStyle: "padding: 12px 22px; border: 1px solid " + (st.sending ? "rgba(213,220,229,0.16)" : "rgba(213,220,229,0.3)") +
+        "; background: " + (st.sending ? "transparent" : "rgba(213,220,229,0.08)") +
+        "; color: " + (st.sending ? "#8d95a1" : "#e6ebf1") +
+        "; cursor: " + (st.sending ? "default" : "pointer") +
+        "; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.16em;",
+      statusText: s ? s.t : "",
+      statusStyle: "font-size: 13px; color: " + (s ? s.c : "transparent") + ";",
+      links: [
+        { label: "E-POSTA", value: "dogukaanyazici@gmail.com", href: "mailto:dogukaanyazici@gmail.com" },
+        { label: "GITHUB", value: "github.com/dobsZY", href: "https://github.com/dobsZY" },
+        { label: "LINKEDIN", value: "linkedin.com/in/dogukaanyazici", href: "https://linkedin.com/in/dogukaanyazici" }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
