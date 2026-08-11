@@ -920,7 +920,7 @@ class Component extends DCLogic {
       this._seekable = true;
       this._introing = true;
       this._cur = 0.30;
-      this._introStart = performance.now() + 300; // 300ms cushion for curtain fade & decoder readiness
+      this._introStart = performance.now();
       const d = document.getElementById("vDur");
       if (d && v.duration) d.textContent = v.duration.toFixed(1);
     }).catch(() => { if (f) f.textContent = "—"; });
@@ -935,17 +935,13 @@ class Component extends DCLogic {
       let targetP = this._target || 0;
       if (this._introing) {
         const elapsed = performance.now() - (this._introStart || performance.now());
-        if (elapsed < 0) {
-          targetP = 0.30;
+        const progress = Math.min(1, Math.max(0, elapsed / 3400)); // 3.4 seconds slow elegant reverse
+        const ease = 0.5 - Math.cos(progress * Math.PI) / 2; // smooth sine in-out
+        const introVal = 0.30 * (1 - ease);
+        if (window.scrollY > 10 || progress >= 1) {
+          this._introing = false;
         } else {
-          const progress = Math.min(1, elapsed / 3400); // 3.4 seconds slow elegant reverse
-          const ease = 0.5 - Math.cos(progress * Math.PI) / 2; // smooth sine in-out
-          const introVal = 0.30 * (1 - ease);
-          if (window.scrollY > 10 || progress >= 1) {
-            this._introing = false;
-          } else {
-            targetP = introVal;
-          }
+          targetP = introVal;
         }
       }
 
