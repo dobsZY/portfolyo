@@ -10,6 +10,7 @@
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 <meta name="google-site-verification" content="izQ4PeaRK4IR-97u3fkWwcXzPZAAypS7eqD3Rp7r2A8" />
 <link rel="canonical" href="https://dogukanyazici.com/" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%23050609'/%3E%3Crect%20x='1'%20y='1'%20width='62'%20height='62'%20rx='13'%20fill='none'%20stroke='%237fa8d8'%20stroke-opacity='.45'%20stroke-width='2'/%3E%3Ctext%20x='32'%20y='43'%20font-family='ui-monospace,monospace'%20font-size='28'%20font-weight='600'%20fill='%237fa8d8'%20text-anchor='middle'%3EDY%3C/text%3E%3C/svg%3E" />
 
 <!-- Open Graph / Social Sharing -->
 <meta property="og:type" content="website" />
@@ -118,11 +119,11 @@
 
 <div style="position: relative; background: #050609;">
 
-  <div id="pcbLayer" style="position: fixed; inset: 0; z-index: 0; opacity: 0; pointer-events: none; mask-image: linear-gradient(90deg, #000 0%, #000 9%, rgba(0,0,0,0.32) 27%, rgba(0,0,0,0.32) 73%, #000 91%, #000 100%); -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 9%, rgba(0,0,0,0.32) 27%, rgba(0,0,0,0.32) 73%, #000 91%, #000 100%);">
+  <div id="pcbLayer" aria-hidden="true" style="position: fixed; inset: 0; z-index: 0; opacity: 0; pointer-events: none; mask-image: linear-gradient(90deg, #000 0%, #000 9%, rgba(0,0,0,0.32) 27%, rgba(0,0,0,0.32) 73%, #000 91%, #000 100%); -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 9%, rgba(0,0,0,0.32) 27%, rgba(0,0,0,0.32) 73%, #000 91%, #000 100%);">
     <canvas id="pcbCanvas" style="position: absolute; inset: 0; width: 100%; height: 100%; display: block;"></canvas>
   </div>
 
-  <div id="videoLayer" style="position: fixed; inset: 0; z-index: 0; opacity: 1; will-change: opacity, transform;">
+  <div id="videoLayer" aria-hidden="true" style="position: fixed; inset: 0; z-index: 0; opacity: 1; will-change: opacity, transform;">
     <video id="heroVideo" muted="muted" playsinline="playsinline" preload="auto" poster="assets/hero-poster.jpg" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;"></video>
     <div style="position: absolute; inset: 0; background: radial-gradient(115% 85% at 50% 45%, rgba(5,6,9,0) 34%, rgba(5,6,9,0.6) 78%, rgba(5,6,9,0.9) 100%);"></div>
     <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5,6,9,0.86) 0%, rgba(5,6,9,0.4) 24%, rgba(5,6,9,0.54) 70%, rgba(5,6,9,0.94) 100%);"></div>
@@ -149,7 +150,7 @@
 
     <div style="display: flex; align-items: center; gap: 8px;">
       <a href="assets/Dogukaan-Yazici-CV.pdf" download="download" style="padding: 8px 13px; border-radius: 999px; border: 1px solid rgba(213,220,229,0.14); background: rgba(213,220,229,0.04); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #d5dce5; white-space: nowrap;" style-hover="border-color: rgba(213,220,229,0.34);">CV ↓</a>
-      <a data-wide="1" href="mailto:dogukaanyazici@gmail.com" style="padding: 8px 13px; border-radius: 999px; border: 1px solid rgba(213,220,229,0.14); background: rgba(213,220,229,0.04); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #d5dce5; white-space: nowrap;" style-hover="border-color: rgba(213,220,229,0.34);">E-POSTA</a>
+      <a data-wide="1" href="mailto:info@dogukanyazici.com" style="padding: 8px 13px; border-radius: 999px; border: 1px solid rgba(213,220,229,0.14); background: rgba(213,220,229,0.04); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: #d5dce5; white-space: nowrap;" style-hover="border-color: rgba(213,220,229,0.34);">E-POSTA</a>
     </div>
   </header>
 
@@ -256,7 +257,7 @@
               <div data-reveal="1" style="display: flex; flex-direction: column; gap: 7px; padding: 17px 0; border-top: 1px solid rgba(213,220,229,0.1);">
                 <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.12em; color: #8d95a1;">{{ r.date }}</span>
                 <span style="font-size: clamp(16px, 1.8vw, 20px); font-weight: 300; letter-spacing: -0.01em; color: #e6ebf1;">{{ r.role }}</span>
-                <span style="font-size: 13.5px; color: #9aa2ac;">{{ r.org }} · {{ r.city }}</span>
+                <span style="font-size: 13.5px; color: #9aa2ac;">{{ r.where }}</span>
                 <sc-if value="{{ r.hasSub }}" hint-placeholder-val="{{ false }}">
                   <div style="display: flex; flex-direction: column; gap: 7px; margin-top: 5px; padding-left: 15px; border-left: 1px solid rgba(213,220,229,0.14);">
                     <sc-for list="{{ r.sub }}" as="s" hint-placeholder-count="3">
@@ -296,7 +297,7 @@
               <input type="file" accept="image/*" onChange="{{ onPick }}" style="display: none;" />
             </label>
           </div>
-          <canvas id="labSrc" style="display: block; width: 100%; height: auto; background: #04050a;"></canvas>
+          <canvas id="labSrc" role="img" aria-label="Görüntü işleme lab'ının kaynak görseli" style="display: block; width: 100%; height: auto; background: #04050a;"></canvas>
         </div>
 
         <div data-reveal="1" style="display: flex; flex-direction: column; gap: 10px; padding: 16px; border: 1px solid rgba(213,220,229,0.12); background: rgba(213,220,229,0.022);">
@@ -304,7 +305,7 @@
             <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.18em; color: #8d95a1;">ÇIKTI</span>
             <span id="labMs" style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; color: #7fa8d8;">— ms</span>
           </div>
-          <canvas id="labOut" style="display: block; width: 100%; height: auto; background: #04050a;"></canvas>
+          <canvas id="labOut" role="img" aria-label="Seçili görüntü işleme operatörünün çıktısı" style="display: block; width: 100%; height: auto; background: #04050a;"></canvas>
         </div>
       </div>
 
@@ -328,7 +329,7 @@
         </div>
         <div style="display: flex; flex-direction: column; gap: 10px; padding: 18px; border: 1px solid rgba(213,220,229,0.12); background: rgba(213,220,229,0.022);">
           <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.18em; color: #8d95a1;">HİSTOGRAM</span>
-          <canvas id="labHist" style="display: block; width: 100%; height: 78px;"></canvas>
+          <canvas id="labHist" role="img" aria-label="Çıktı görselinin parlaklık histogramı" style="display: block; width: 100%; height: 78px;"></canvas>
         </div>
       </div>
 
@@ -381,7 +382,7 @@
           </div>
 
           <!-- Interactive Social & Info Cards Grid -->
-          <address style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; font-style: normal;" data-modal-row="1">
+          <address style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; font-style: normal;" data-social-grid="1">
             <sc-for list="{{ links }}" as="k" hint-placeholder-count="3">
               <a href="{{ k.href }}" target="_blank" rel="noopener" style="display: flex; flex-direction: column; gap: 8px; padding: 16px; border-radius: 10px; border: 1px solid rgba(213,220,229,0.12); background: rgba(213,220,229,0.025); transition: all 0.25s var(--ease-out);" style-hover="border-color: rgba(127,168,216,0.35); background: rgba(213,220,229,0.06); transform: translateY(-3px);">
                 <div style="display: flex; align-items: center; justify-content: space-between;">
@@ -413,13 +414,13 @@
 
   <sc-if value="{{ modal }}" hint-placeholder-val="{{ false }}">
     <div onClick="{{ closeModal }}" style="position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: clamp(14px, 4vw, 48px); background: rgba(3,4,6,0.82); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); animation: rise .28s ease-out both;">
-      <div id="modalPanel" role="dialog" aria-modal="true" onClick="{{ stop }}" style="position: relative; width: min(880px, 100%); max-height: 88vh; overflow-y: auto; padding: clamp(22px, 3.4vw, 42px); border: 1px solid rgba(213,220,229,0.16); background: #090b10;">
+      <div id="modalPanel" role="dialog" aria-modal="true" aria-labelledby="modalTitle" onClick="{{ stop }}" style="position: relative; width: min(880px, 100%); max-height: 88vh; overflow-y: auto; padding: clamp(22px, 3.4vw, 42px); border: 1px solid rgba(213,220,229,0.16); background: #090b10;">
         <button id="modalClose" onClick="{{ closeModal }}" aria-label="Kapat" style="position: absolute; top: 16px; right: 16px; width: 34px; height: 34px; border: 1px solid rgba(213,220,229,0.16); background: transparent; cursor: pointer; color: #d5dce5; font-size: 15px; line-height: 1;" style-hover="border-color: rgba(213,220,229,0.4);">×</button>
 
         <div style="display: flex; flex-direction: column; gap: 22px;">
           <div style="display: flex; flex-direction: column; gap: 10px; padding-right: 44px;">
             <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.2em; color: #7fa8d8;">{{ modal.label }} · {{ modal.year }}</span>
-            <h3 style="margin: 0; font-size: clamp(22px, 3.2vw, 38px); font-weight: 200; line-height: 1.1; letter-spacing: -0.025em; color: #e6ebf1; text-wrap: pretty;">{{ modal.title }}</h3>
+            <h3 id="modalTitle" style="margin: 0; font-size: clamp(22px, 3.2vw, 38px); font-weight: 200; line-height: 1.1; letter-spacing: -0.025em; color: #e6ebf1; text-wrap: pretty;">{{ modal.title }}</h3>
           </div>
 
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 14px;">
@@ -492,7 +493,7 @@ const CARDS = [
     detail: [
       { h: "PROBLEM", t: "Model eğitmekle çalışan bir ürün teslim etmek arasındaki farkı anlatmanın en dürüst yolu, portföyün kendisinin çalışan bir ürün olması." },
       { h: "YAKLAŞIM", t: "Hero'daki işlemci videosu oynatılmıyor; kaydırma değeri yumuşatılıp doğrudan videonun zaman eksenine bağlanıyor. Arka plandaki anakart katmanı three.js ile üretilen PCB izleri ve izler boyunca akan ışık darbeleri. Laboratuvar bölümündeki konvolüsyon çekirdekleri saf JavaScript ile yazıldı, hiçbir görsel sunucuya gitmiyor." },
-      { h: "SONUÇ", t: "Tek sayfa, harici görüntü işleme kütüphanesi yok. Ekran dışındayken WebGL çizimi tamamen duruyor, devicePixelRatio 1.5 ile sınırlı, prefers-reduced-motion tüm hareketi kapatıyor." }
+      { h: "SONUÇ", t: "Tek sayfa, harici görüntü işleme kütüphanesi yok. Anakart katmanı görünmezken ve sekme arka plandayken WebGL çizimi tamamen duruyor, devicePixelRatio 1.5 ile sınırlı, prefers-reduced-motion tüm hareketi kapatıyor." }
     ] },
   { id: "astor", label: "ASTOR", year: "2026", cspan: 1, rspan: 1, titleSize: "clamp(17px, 1.9vw, 21px)",
     title: "Legacy sistem modernizasyonu",
@@ -585,6 +586,8 @@ class Component extends DCLogic {
       if (e.key === "Tab" && this.state.open) this.trap(e);
     };
     window.addEventListener("keydown", this._onKey);
+    this._onVis = () => { if (document.hidden) this.stopPcb(); else if (this._pcbWanted) this.startPcb(); };
+    document.addEventListener("visibilitychange", this._onVis);
     const h = (location.hash || "").replace("#", "");
     if (h && CARDS.some((c) => c.id === h)) setTimeout(() => this.openModal(h), 120);
   }
@@ -593,13 +596,13 @@ class Component extends DCLogic {
     this._dead = true;
     if (this._raf) cancelAnimationFrame(this._raf);
     if (this._pcbRaf) cancelAnimationFrame(this._pcbRaf);
-    if (this._io) this._io.disconnect();
-    if (this._pcbIo) this._pcbIo.disconnect();
     if (this._labWatch) clearInterval(this._labWatch);
     if (this._blobUrl) URL.revokeObjectURL(this._blobUrl);
     window.removeEventListener("scroll", this._onScroll);
     window.removeEventListener("resize", this._onResize);
     window.removeEventListener("keydown", this._onKey);
+    window.removeEventListener("pointermove", this._onPointerMove);
+    document.removeEventListener("visibilitychange", this._onVis);
   }
 
   componentDidUpdate() {
@@ -631,6 +634,7 @@ class Component extends DCLogic {
       const narrow = w <= 760;
       document.querySelectorAll("[data-stack-row]").forEach((r) => { r.style.gridTemplateColumns = narrow ? "minmax(0, 1fr)" : "210px minmax(0, 1fr)"; r.style.gap = narrow ? "8px" : "22px"; });
       document.querySelectorAll("[data-modal-row]").forEach((r) => { r.style.gridTemplateColumns = narrow ? "minmax(0, 1fr)" : "132px minmax(0, 1fr)"; r.style.gap = narrow ? "8px" : "20px"; });
+      document.querySelectorAll("[data-social-grid]").forEach((r) => { r.style.gridTemplateColumns = narrow ? "minmax(0, 1fr)" : "repeat(2, minmax(0, 1fr))"; });
       const DESKTOP = {
         "[data-two-col]": "1fr 1fr",
         "[data-lab-ctl]": "minmax(0, 1.4fr) minmax(0, 1fr)",
@@ -848,7 +852,11 @@ class Component extends DCLogic {
       }
       if (pcb) {
         const rise = this._mobile ? (past ? 1 : 0) : Math.min(1, window.scrollY / 300);
-        pcb.style.opacity = Math.max(0.38, 0.38 * rise).toFixed(4);
+        const po = 0.38 * rise;
+        pcb.style.opacity = po.toFixed(4);
+        // the layer is a full-screen fixed element, so "off screen" means invisible rather
+        // than out of the viewport — its own opacity is what drives the WebGL loop
+        this.setPcbActive(po > 0.01);
       }
       if (copy && !this._mobile) {
         copy.style.opacity = (1 - ramp(0.86, 1)).toFixed(3);
@@ -917,27 +925,51 @@ class Component extends DCLogic {
 
   // ---------- hero video ----------
 
+  // Scroll-scrub needs random access to the file. When the host honours HTTP Range
+  // (Vercel does) the browser streams and seeks by itself, so the intro starts on the
+  // first chunk instead of waiting out all 15 MB. The blob path stays as a fallback for
+  // hosts that answer 200 to every request — there a plain src could never seek.
+  loadHeroVideo(v) {
+    const SRC = "uploads/islemci-web_2.mp4";
+
+    const attach = (src) => new Promise((res, rej) => {
+      const cleanup = () => { v.removeEventListener("loadeddata", ready); v.removeEventListener("error", fail); };
+      const ready = () => { cleanup(); res(); };
+      const fail = () => { cleanup(); rej(new Error("video load failed")); };
+      v.addEventListener("loadeddata", ready);
+      v.addEventListener("error", fail);
+      v.src = src;
+      v.load();
+    });
+
+    const toBlob = () => fetch(SRC).then((r) => r.blob()).then((blob) => {
+      if (this._dead) return;
+      this._blobUrl = URL.createObjectURL(blob);
+      return attach(this._blobUrl);
+    });
+
+    return fetch(SRC, { headers: { Range: "bytes=0-1" } }).then((r) => {
+      const ranged = r.status === 206;
+      // a host that ignores Range answers 200 and would stream the whole file into this
+      // response — drop it before it costs anything
+      if (r.body && r.body.cancel) { try { r.body.cancel(); } catch (e) {} }
+      if (this._dead) return;
+      return ranged ? attach(SRC) : toBlob();
+    }, toBlob);
+  }
+
   setupVideo() {
     const v = document.getElementById("heroVideo");
     if (!v) return;
     if (this._mobile) return; // iOS Safari cannot be scroll-scrubbed reliably — poster only
+    if (this._reduced) return; // no scrub, no reason to pull 15 MB down
 
     v.pause();
     v.addEventListener("play", () => v.pause());
     this._seekable = false;
     const f = document.getElementById("vFrame");
 
-    // the static host answers 200 with no Range support, so a plain src can never seek
-    fetch("uploads/islemci-web_2.mp4").then((r) => r.blob()).then((blob) => {
-      if (this._dead) return;
-      this._blobUrl = URL.createObjectURL(blob);
-      return new Promise((res) => {
-        const ready = () => { v.removeEventListener("loadeddata", ready); res(); };
-        v.addEventListener("loadeddata", ready);
-        v.src = this._blobUrl;
-        v.load();
-      });
-    }).then(() => {
+    this.loadHeroVideo(v).then(() => {
       if (this._dead) return;
       v.pause();
       if (v.duration) try { v.currentTime = 0.30 * v.duration; } catch (e) {}
@@ -1112,9 +1144,13 @@ class Component extends DCLogic {
     };
     this._pcbResize();
 
-    this._pcbVisible = true;
     if (this._reduced) { this.renderPcb(); return; }
-    this.startPcb();
+    this.setPcbActive(this._pcbWanted !== false);
+  }
+
+  setPcbActive(on) {
+    this._pcbWanted = on;
+    if (on && !document.hidden) this.startPcb(); else this.stopPcb();
   }
 
   startPcb() {
@@ -1127,6 +1163,11 @@ class Component extends DCLogic {
     };
     this._pcbVisible = true;
     step();
+  }
+
+  stopPcb() {
+    if (this._pcbRaf) { cancelAnimationFrame(this._pcbRaf); this._pcbRaf = null; }
+    this._pcbVisible = false;
   }
 
   renderPcb() {
@@ -1357,15 +1398,24 @@ class Component extends DCLogic {
       email: form.email.value.trim(),
       message: form.message.value.trim()
     };
+    if (!data.name || !data.email || !data.message) return;
     this.setState({ sending: true, status: "sending" });
-    fetch("/api/contact", {
+    // FormSubmit'in hash'li endpoint'i: adresin kaynak kodda düz metin durmaması için.
+    // Hedef kutuyu değiştirmek FormSubmit hesabından yapılır, buradan değil.
+    fetch("https://formsubmit.co/ajax/c38fa4cb9a65941b95794beb02631fc7", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
       body: JSON.stringify(data)
     }).then((r) => {
       if (!r.ok) throw new Error("http " + r.status);
-      this.setState({ sending: false, status: "ok" });
-      form.reset();
+      return r.json();
+    }).then((res) => {
+      if (res.success) {
+        this.setState({ sending: false, status: "ok" });
+        form.reset();
+      } else {
+        throw new Error("FormSubmit error");
+      }
     }).catch(() => {
       this.setState({ sending: false, status: "err" });
     });
@@ -1410,7 +1460,12 @@ class Component extends DCLogic {
         key: (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); this.openModal(c.id); } }
       })),
       stack: STACK,
-      columns: COLUMNS,
+      // city is optional (bakanlık / YÖK programlarının şehri yok) — ayracı burada kuruyoruz
+      // ki şablonda "Kurum · " gibi sarkan bir nokta kalmasın
+      columns: COLUMNS.map((col) => ({
+        head: col.head,
+        rows: col.rows.map((r) => Object.assign({}, r, { where: r.city ? r.org + " · " + r.city : r.org }))
+      })),
       ops: OPS.map((o) => ({ n: o.n, style: this.opStyle(st.op === o.k), pick: () => this.setState({ op: o.k }) })),
       sliders: sliders,
       onPick: (e) => { const f = e.target.files && e.target.files[0]; if (f) this.loadImage(f); },
@@ -1428,7 +1483,7 @@ class Component extends DCLogic {
       statusText: s ? s.t : "",
       statusStyle: "font-size: 13px; color: " + (s ? s.c : "transparent") + ";",
       links: [
-        { label: "E-POSTA", value: "dogukaanyazici@gmail.com", href: "mailto:dogukaanyazici@gmail.com" },
+        { label: "E-POSTA", value: "info@dogukanyazici.com", href: "mailto:info@dogukanyazici.com" },
         { label: "GITHUB", value: "github.com/dobsZY", href: "https://github.com/dobsZY" },
         { label: "LINKEDIN", value: "linkedin.com/in/dogukaanyazici", href: "https://linkedin.com/in/dogukaanyazici" }
       ]
