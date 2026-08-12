@@ -26,20 +26,22 @@ DKIM ile uğraşmadan panelden kutu açılıyor. Kodda değişecek bir şey yok,
 
 ## Açık
 
-- [ ] **Mobil veri.** Tarama dosyanın tamamını gerektiriyor (15 MB). Veri tasarrufu modu ve
-      2G/3G bağlantılar otomatik poster'a düşüyor, ama iyi 4G'de 15 MB iniyor. Rahatsız
-      ederse: mobil için ayrı, küçük bir kopya servis etmek gerekir (masaüstü kalitesi
-      korunur) — ya da mobilde tekrar poster'a dönülür.
+- [ ] **CV PDF'i güncellenmeli.** `assets/Dogukaan-Yazici-CV.pdf` hâlâ eski bilgileri
+      taşıyor: GPA 3.20 ve lise şehri Ankara. Sitede ikisi de düzeltildi (3.30 / Samsun),
+      YÖK programı da "2025 — 2026" oldu. PDF'i yeniden dışa aktarıp aynı dosya adıyla
+      `assets/` altına koyman yeterli — cache başlığı bilerek kısa tutuldu, güncelleme
+      anında yayına girer.
 
-## Opsiyonel / sıra bekleyenler
+## Kapatıldı — gerekmediğine karar verildi (2026-08-12)
 
-ffmpeg gerektiren iki madde 2026-08-12'de **ertelendi** (kurulum istenmedi):
-
-- [ ] `uploads/islemci-web_2.mp4` faststart değil (`moov` atomu sonda). Kayıpsız remux ilk
-      kareyi hızlandırır, kaliteye dokunmaz:
-      `ffmpeg -i in.mp4 -c copy -movflags +faststart out.mp4`
-- [ ] Mobil için ayrı, küçük bir kopya (masaüstü kalitesi korunur). Ancak 15 MB'lık indirme
-      rahatsız ederse gerekli.
+- **Faststart remux.** Ölçüldü: `moov` atomu sonda olduğu için tarayıcı fazladan bir istek
+  yapıyor (canlıda 669→1114 ms). Kazanç ~450 ms, yani 2,8 sn'lik açılışın altıda biri —
+  ffmpeg kurup videoyu yeniden üretmeye değmez. **Videoyu başka bir sebeple yeniden export
+  edersen `-movflags +faststart` eklemeyi unutma, o zaman bedava gelir.**
+- **Mobil için küçük kopya.** 15 MB mutlak olarak çok ama Wi-Fi'da önemsiz, Vercel bant
+  genişliğinde sorun değil. Sınırlı veri paketi bir gün sorun olursa ffmpeg'siz ara yol:
+  mobilde `preload="auto"` yerine `preload="metadata"` — tarayıcı dosyanın tamamını peşinen
+  çekmez, bedeli tarama sırasında takılma riski.
 
 Kalan dış bağımlılıklar — hepsi **isteğe bağlı iyileştirme**, erişilemezse içerik yine
 render oluyor: Google Fonts (yedek font devreye girer), jsdelivr'dan GSAP + ScrollTrigger
