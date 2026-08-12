@@ -67,6 +67,16 @@
   ]
 }
 </script>
+<!-- support.js React'i normalde unpkg.com'dan çeker. Sayfadaki her şey React ile render
+     edildiği için unpkg'ye erişilemediği an site tamamen boş kalıyordu. __resources
+     eşlemesi runtime'ı kendi kopyalarımıza yönlendiriyor; dosyalar unpkg'den indirildi ve
+     SHA-384'leri support.js'in beklediği SRI değerleriyle doğrulandı. -->
+<script>
+window.__resources = {
+  "https://unpkg.com/react@18.3.1/umd/react.production.min.js": "./vendor/react.production.min.js",
+  "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js": "./vendor/react-dom.production.min.js"
+};
+</script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -76,8 +86,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@200;300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js" integrity="sha384-XmJ9SoHtVOHoQUcKvFAzVXwdkKo1Ie3bhmSoIAkcdsHGaIrVJIkmozyq0FJeb/Ly" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js" integrity="sha384-wl5TeDVvOWt30Pbf8aSo2ZrzsOjddu3avOBvHe+p+OhJt9gP6w9YXmDkN5DK2/dF" crossorigin="anonymous"></script>
 <style>
   :root {
     --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
@@ -578,8 +588,11 @@ class Component extends DCLogic {
     // ayrı bir soru: tarama tüm dosyayı gerektirdiği için, veri tasarrufu açıkken ya da
     // bağlantı yavaşken telefonu 15 MB'lık bir indirmeye sokmuyoruz — poster'da kalıyor.
     const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection || {};
-    const cimriAg = conn.saveData === true || /^(slow-2g|2g|3g)$/.test(conn.effectiveType || "");
-    this._scrub = !this._reduced && !cimriAg;
+    // saveData kullanıcının açık tercihi — her cihazda saygı duyuyoruz. effectiveType ise
+    // son isteklerden yapılan bir tahmin; yavaş bir açılış masaüstünde de "3g" damgası
+    // yiyebiliyor, o yüzden ona yalnızca telefonda (hücresel veri riski varken) bakıyoruz.
+    const yavasAg = /^(slow-2g|2g|3g)$/.test(conn.effectiveType || "");
+    this._scrub = !this._reduced && conn.saveData !== true && !(this._mobile && yavasAg);
     this.fit();
     this.setupReveal();
     this.setupScroll();
@@ -682,6 +695,22 @@ class Component extends DCLogic {
         hdr.querySelectorAll("a[download], a[href^='mailto:']").forEach((a) => {
           a.style.padding = narrow ? "13px 15px" : "8px 13px";
         });
+      }
+      // 360 px altında beş madde tek satıra sığmıyor. Kaydırmalı bir şeritte üçünün ekran
+      // dışında kalmasındansa iki satıra sarsın — dokunma hedefleri 46 px'te kalıyor.
+      this._navWrapped = w <= 360;
+      if (nav) {
+        const navIc = nav.firstElementChild;
+        // yeniden boyutlanmada butonlar yeniden render edilmiyor, dolgularını burada
+        // tazeliyoruz; render sırasında aynı değeri pill() zaten üretiyor
+        nav.querySelectorAll("[data-nav]").forEach((b) => { b.style.padding = this.navPad(); });
+        nav.style.overflowX = this._navWrapped ? "visible" : "auto";
+        if (this._navWrapped) nav.style.justifyContent = "center";
+        if (navIc) {
+          navIc.style.flexWrap = this._navWrapped ? "wrap" : "nowrap";
+          navIc.style.justifyContent = this._navWrapped ? "center" : "flex-start";
+          navIc.style.borderRadius = this._navWrapped ? "24px" : "999px";
+        }
       }
     };
     apply();
@@ -939,6 +968,9 @@ class Component extends DCLogic {
     const btn = document.querySelector('[data-nav="' + id + '"]');
     const pill = document.getElementById("navPill");
     if (!gsap || !btn || !pill) return;
+    // iki satıra sarmış menüde pill tek bir satırı kaplayamaz; aktif maddeyi paintNav
+    // zaten renkle işaretliyor, o yüzden burada gizleyip çıkıyoruz
+    if (this._navWrapped) { gsap.set(pill, { opacity: 0 }); pill.__seed = 0; return; }
     const p = btn.parentElement.getBoundingClientRect();
     const b = btn.getBoundingClientRect();
     if (!b.width) { requestAnimationFrame(() => this.moveNavPill(id)); return; }
@@ -1070,6 +1102,8 @@ class Component extends DCLogic {
       window.__pfThree = true;
       const s = document.createElement("script");
       s.src = "https://cdn.jsdelivr.net/npm/three@0.134.0/build/three.min.js";
+      s.integrity = "sha384-9EQoUIJYrv09/oYhSxnw1VpLcfPw3BM9dE7+D/3wGUPeLLa7F9Z6OAoD+i/M6FK9";
+      s.crossOrigin = "anonymous";
       document.head.appendChild(s);
     }
     setTimeout(() => this.loadThree(), 140);
@@ -1462,10 +1496,15 @@ class Component extends DCLogic {
     });
   }
 
+  navPad() {
+    return window.innerWidth <= 760 ? "15px 6px" : "7px 14px";
+  }
+
   pill() {
-    // dokunmatikte 44 px hedef; imleçli cihazda özgün ölçü korunuyor
-    // yatayda dar tutuyoruz ki beş madde 375 px'lik ekrana kaydırmadan sığsın
-    const pad = this._mobile ? "15px 6px" : "7px 14px";
+    // dokunmatikte 44 px hedef; imleçli cihazda özgün ölçü korunuyor. Yatayda dar
+    // tutuyoruz ki beş madde 375 px'lik ekrana kaydırmadan sığsın. _mobile mount anında
+    // sabitlendiği için burada anlık genişliğe bakıyoruz; fit() de resize'da yeniliyor.
+    const pad = this.navPad();
     return "position: relative; z-index: 1; padding: " + pad + "; border-radius: 999px; border: 1px solid transparent; background: transparent; color: #8d95a1; cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.1em; white-space: nowrap; transition: color .25s ease;";
   }
 

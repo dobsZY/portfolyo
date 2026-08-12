@@ -1,0 +1,4 @@
+# vendor/ altındaki dosyalar unpkg'den olduğu gibi indirildi ve SHA-384'leri
+# support.js'in beklediği SRI değerleriyle doğrulandı. Satır sonu dönüşümü baytları
+# değiştirip bu doğrulamayı imkânsız kılar.
+vendor/** -text

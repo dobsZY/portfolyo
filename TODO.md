@@ -24,12 +24,8 @@ Tekrar açılırsa seçenekler:
 Güzel Hosting'in avantajı: alan adı ve DNS zaten orada (NS `*.guzelhosting.com`), MX/SPF/
 DKIM ile uğraşmadan panelden kutu açılıyor. Kodda değişecek bir şey yok, adres aynı.
 
-## Açık — test bekliyor
+## Açık
 
-- [ ] **Gerçek iPhone'da hero videosu.** Mobilde kaydırmayla tarama açıldı, ama iOS Safari
-      duraklatılmış videoda kareyi çizmeme davranışı buradan test edilemiyor. `loadeddata`
-      anında tek karelik bir `play()/pause()` ile dekoderi uyandırıyoruz; gerçek cihazda
-      tutmazsa `_scrub`'ı iOS'ta kapatmak tek satırlık iş.
 - [ ] **Mobil veri.** Tarama dosyanın tamamını gerektiriyor (15 MB). Veri tasarrufu modu ve
       2G/3G bağlantılar otomatik poster'a düşüyor, ama iyi 4G'de 15 MB iniyor. Rahatsız
       ederse: mobil için ayrı, küçük bir kopya servis etmek gerekir (masaüstü kalitesi
@@ -37,15 +33,17 @@ DKIM ile uğraşmadan panelden kutu açılıyor. Kodda değişecek bir şey yok,
 
 ## Opsiyonel / sıra bekleyenler
 
-- [ ] 320 px genişlikte (iPhone SE) üst menü hâlâ ~48 px taşıp yatay kayıyor. 375 px ve
-      üstünde beş madde de sığıyor. Kabul edilebilir bulundu, istenirse yazı küçültülür.
+ffmpeg gerektiren iki madde 2026-08-12'de **ertelendi** (kurulum istenmedi):
+
 - [ ] `uploads/islemci-web_2.mp4` faststart değil (`moov` atomu sonda). Kayıpsız remux ilk
-      kareyi hızlandırır: `ffmpeg -i in.mp4 -c copy -movflags +faststart out.mp4`
-      (makinede ffmpeg kurulu değil)
-- [ ] GSAP ve three.js `<script>` etiketlerinde SRI yok. Önce kayan `gsap@3` etiketini
-      sabit sürüme çekmek gerekiyor.
-- [ ] Tüm içerik client-side render ediliyor; unpkg.com erişilemezse sayfa boş kalıyor.
-      Mimari değişiklik, ayrı bir iş.
+      kareyi hızlandırır, kaliteye dokunmaz:
+      `ffmpeg -i in.mp4 -c copy -movflags +faststart out.mp4`
+- [ ] Mobil için ayrı, küçük bir kopya (masaüstü kalitesi korunur). Ancak 15 MB'lık indirme
+      rahatsız ederse gerekli.
+
+Kalan dış bağımlılıklar — hepsi **isteğe bağlı iyileştirme**, erişilemezse içerik yine
+render oluyor: Google Fonts (yedek font devreye girer), jsdelivr'dan GSAP + ScrollTrigger
+(animasyon olmaz, içerik görünür kalır) ve three.js (dekoratif anakart katmanı çizilmez).
 
 ## Biten
 
@@ -63,3 +61,18 @@ DKIM ile uğraşmadan panelden kutu açılıyor. Kodda değişecek bir şey yok,
       sığıyor (340/347 px), dokunma hedefleri 30 px → 46 px
 - [x] Mobil: kaydırmaya bağlı video taraması açıldı (eskiden donmuş poster + ~1900 px ölü
       kaydırma vardı)
+- [x] Gerçek iPhone testi — 2026-08-12'de canlıda doğrulandı, sorun çıkmadı. iOS Safari'nin
+      duraklatılmış videoda kare çizmeme sorunu için eklenen `loadeddata` + tek karelik
+      `play()/pause()` uyandırması işe yaradı
+- [x] **unpkg bağımlılığı kaldırıldı.** React + ReactDOM `vendor/` altına alındı,
+      `window.__resources` ile runtime oraya yönlendiriliyor. Dosyalar unpkg'den indirildi
+      ve SHA-384'leri support.js'in beklediği SRI değerleriyle doğrulandı. Artık unpkg
+      erişilemese de sayfa render oluyor
+- [x] GSAP `gsap@3` → `gsap@3.15.0` sabitlendi, GSAP/ScrollTrigger/three.js'e SRI +
+      crossorigin eklendi
+- [x] 320 px'te (iPhone SE) menü iki satıra sarıyor — beş madde de görünür, 46 px dokunma
+      hedefleri korunuyor, yatay kaydırma yok. Bedeli: header 172 px (ekranın %25'i).
+      Fazla bulunursa 360 px altında menüyü tamamen gizlemek alternatif
+- [x] Ağ koruması daraltıldı: `saveData` her cihazda saygı görüyor, ama `effectiveType`
+      tahmini yalnızca telefonda dikkate alınıyor — yavaş açılan bir masaüstü oturumu
+      "3g" damgası yiyip hero videosunu kaybetmesin diye
